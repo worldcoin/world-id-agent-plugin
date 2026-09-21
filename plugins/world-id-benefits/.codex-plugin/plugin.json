@@ -1,0 +1,20 @@
+{
+  "name": "world-id-benefits",
+  "version": "0.1.0",
+  "description": "Use one private World profile with passkey access and independently verified human credentials.",
+  "author": { "name": "Tools for Humanity" },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "World ID",
+    "shortDescription": "See what World ID unlocks today.",
+    "longDescription": "Create a private passkey-backed World profile, add Orb verification when ready, and discover or claim capabilities appropriate to the profile's active credentials. The model supports future Selfie Check and NFC document credentials without treating them as Proof of Human.",
+    "developerName": "Tools for Humanity",
+    "category": "Productivity",
+    "capabilities": ["OAuth", "Read"],
+    "defaultPrompt": ["Show me the benefits I can access with World ID."],
+    "brandColor": "#3155EE",
+    "composerIcon": "./assets/world-id.png",
+    "logo": "./assets/world-id.png"
+  }
+}

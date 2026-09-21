@@ -1,0 +1,20 @@
+{
+  "name": "world-id-demo",
+  "interface": {
+    "displayName": "World ID Demo"
+  },
+  "plugins": [
+    {
+      "name": "world-id-benefits",
+      "source": {
+        "source": "local",
+        "path": "./plugins/world-id-benefits"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
