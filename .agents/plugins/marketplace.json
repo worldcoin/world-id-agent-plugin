@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "world-id-benefits",
+      "name": "world-id",
       "source": {
         "source": "local",
-        "path": "./plugins/world-id-benefits"
+        "path": "./plugins/world-id"
       },
       "policy": {
         "installation": "AVAILABLE",
