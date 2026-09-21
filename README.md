@@ -1,6 +1,6 @@
 # World ID
 
-A ChatGPT and Codex plugin that connects to the hosted World ID MCP server at
+A plugin for AI agents that connects to the hosted World ID MCP server at
 [auth.worldcoin.dev/mcp](https://auth.worldcoin.dev/mcp).
 
 The plugin uses `get_benefits` to list approved, published apps that offer
