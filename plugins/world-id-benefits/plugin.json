@@ -1,0 +1,7 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "world-id-benefits",
+  "version": "0.1.0",
+  "description": "Use one private World profile with passkey access and independently verified human credentials.",
+  "author": { "name": "Tools for Humanity" }
+}
