@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "world-id-benefits": {
+    "world-id": {
       "type": "streamable-http",
       "url": "https://auth.worldcoin.dev/mcp"
     }
