@@ -10,12 +10,15 @@ not staging or production.
 You need Git and either Codex CLI (`codex`) or Claude Code (`claude`) installed
 and signed in. **No manual clone, build, Python, or local server is required.**
 
+Have the sandbox World ID app ready and complete its test proof-of-human flow.
+A staging or production verification is not a substitute for sandbox setup.
+
 If you previously installed the staging `world-id` plugin, remove or disable it
 first. Also disable any separately configured staging World ID MCP server.
 The new `world-id-sandbox` identity does not switch existing installations to
 sandbox automatically.
 
-### 1. Install in your agent (choose one)
+### 1. Install the plugin (choose your agent)
 
 #### Codex
 
@@ -24,7 +27,6 @@ Run in your terminal:
 ```sh
 codex plugin marketplace add worldcoin/world-id-agent-plugin
 codex plugin add world-id-sandbox@world-id-demo
-codex
 ```
 
 If `codex plugin` is unrecognized, update your Codex CLI before continuing.
@@ -36,38 +38,66 @@ Run in your terminal:
 ```sh
 claude plugin marketplace add worldcoin/world-id-agent-plugin
 claude plugin install world-id-sandbox@world-id-demo
+```
+
+Installing the plugin configures its MCP server and skills. It does **not** sign
+you into World ID. You do not need to run `codex mcp add` or `claude mcp add`
+as well.
+
+### 2. Authorize World ID and launch your agent
+
+#### Codex
+
+**Complete MCP login in your terminal before starting the Codex session.**
+If Codex is already running, exit it first, then run:
+
+```sh
+codex mcp login world-id-sandbox --scopes mcp:read
+```
+
+Complete World ID sign-in and approve access in the browser using your sandbox
+app. If the browser does not open, open the URL printed by the command. Keep the
+command running until it reports:
+
+```text
+Successfully logged in to MCP server 'world-id-sandbox'.
+```
+
+Only after login succeeds, launch Codex:
+
+```sh
+codex
+```
+
+This authorizes World ID access separately from signing into Codex itself.
+Codex saves the OAuth credentials and uses them for MCP requests; never paste
+tokens into chat. You normally only repeat MCP login if authorization expires,
+is revoked, or Codex asks you to reconnect. See the
+[Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+
+Why this order? In our Codex CLI 0.155.1 tests, a session that connected
+anonymously did not pick up credentials saved by a later login command. Logging
+in before launching avoids that stale connection. If you already completed login
+from inside a running session, exit and relaunch Codex before checking again.
+
+#### Claude Code
+
+Launch Claude Code:
+
+```sh
 claude
 ```
 
-**Testing before this change is merged?** Replace the first command for your
-agent with the corresponding branch-specific command below, then run the install
-and launch commands above:
-
-```sh
-# Codex
-codex plugin marketplace add worldcoin/world-id-agent-plugin --ref codex/world-id-sandbox-hackathon
-
-# Claude Code
-claude plugin marketplace add worldcoin/world-id-agent-plugin@codex/world-id-sandbox-hackathon
-```
-
-### 2. Connect your sandbox World ID
-
-Inside your agent, enter `/mcp` and check that the sandbox World ID connection
-is listed. Complete World ID sign-in and OAuth consent when prompted. In Claude
-Code, select the server in `/mcp` to authenticate. If Codex reports authentication
-is required without opening a prompt, check its available connection controls;
-repeated tool calls do not guarantee that a sign-in window will open.
-
-Use the sandbox World app and complete its test proof-of-human flow. A staging
-or production verification is not a substitute for sandbox setup.
+Enter `/mcp`, select the sandbox World ID server, and authenticate. Complete
+World ID sign-in and consent before continuing. `codex mcp login` does not
+authenticate Claude Code.
 
 ### 3. Try it
 
 Send these prompts one at a time:
 
 ```text
-Connect my sandbox World ID.
+Is my sandbox World ID connected?
 What benefits are available?
 Help me use the maitre benefit, if available.
 ```
@@ -88,8 +118,10 @@ Codex:
 ```sh
 codex mcp add world-id-sandbox --url https://sandbox.auth.world.org/mcp
 codex mcp login world-id-sandbox --scopes mcp:read
-codex
 ```
+
+Wait for browser sign-in to complete and the login command to report success,
+then launch `codex`.
 
 Claude Code:
 
