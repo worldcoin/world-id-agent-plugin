@@ -13,11 +13,6 @@ and signed in. **No manual clone, build, Python, or local server is required.**
 Have the sandbox World ID app ready and complete its test proof-of-human flow.
 A staging or production verification is not a substitute for sandbox setup.
 
-If you previously installed the staging `world-id` plugin, remove or disable it
-first. Also disable any separately configured staging World ID MCP server.
-The new `world-id-sandbox` identity does not switch existing installations to
-sandbox automatically.
-
 ### 1. Install the plugin (choose your agent)
 
 #### Codex
