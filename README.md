@@ -75,11 +75,6 @@ tokens into chat. You normally only repeat MCP login if authorization expires,
 is revoked, or Codex asks you to reconnect. See the
 [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
 
-Why this order? In our Codex CLI 0.155.1 tests, a session that connected
-anonymously did not pick up credentials saved by a later login command. Logging
-in before launching avoids that stale connection. If you already completed login
-from inside a running session, exit and relaunch Codex before checking again.
-
 #### Claude Code
 
 Launch Claude Code:
