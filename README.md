@@ -40,30 +40,22 @@ claude plugin marketplace add worldcoin/world-id-agent-plugin
 claude plugin install world-id-sandbox@world-id-demo
 ```
 
-Installing the plugin configures its MCP server and skills. It does **not** sign
-you into World ID. You do not need to run `codex mcp add` or `claude mcp add`
-as well.
+After installing the plugin, sign in to World ID using the steps below.
 
 ### 2. Authorize World ID and launch your agent
 
 #### Codex
 
-**Complete MCP login in your terminal before starting the Codex session.**
-If Codex is already running, exit it first, then run:
+Run this in your terminal before starting Codex. If Codex is already running,
+exit it first:
 
 ```sh
 codex mcp login world-id-sandbox --scopes mcp:read
 ```
 
-Complete World ID sign-in and approve access in the browser using your sandbox
-app. If the browser does not open, open the URL printed by the command. Keep the
-command running until it reports:
-
-```text
-Successfully logged in to MCP server 'world-id-sandbox'.
-```
-
-Only after login succeeds, launch Codex:
+Complete browser sign-in using your sandbox app and wait for the command to
+report success. If the browser does not open, open the URL printed by the command.
+Then start Codex:
 
 ```sh
 codex
