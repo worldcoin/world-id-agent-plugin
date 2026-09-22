@@ -15,14 +15,22 @@ and benefit catalog. A partner must also be configured for the chosen environmen
 
 ## Install the plugin
 
-Run these commands from this repository's root after cloning it.
+Run these commands from this repository's root after cloning it. Build the two
+self-contained packages once (Python 3, no dependencies):
+
+```sh
+python3 scripts/build-plugins.py
+```
+
+Install from `dist/`, not directly from the source folders or a Git marketplace
+URL. The build bundles the shared skills into each plugin.
 
 ### Codex
 
-Add this checkout as a marketplace, then install **one** plugin:
+Add the built marketplace, then install **one** plugin:
 
 ```sh
-codex plugin marketplace add .
+codex plugin marketplace add ./dist
 codex plugin add world-id-sandbox@world-id-demo
 codex
 ```
@@ -42,10 +50,10 @@ remove separately configured servers.
 Load the selected plugin for this session:
 
 ```sh
-claude --plugin-dir ./plugins/world-id-sandbox
+claude --plugin-dir ./dist/plugins/world-id-sandbox
 ```
 
-For staging, use `./plugins/world-id`. Run `/mcp` inside Claude Code and
+For staging, use `./dist/plugins/world-id`. Run `/mcp` inside Claude Code and
 authenticate the selected World ID server. To switch environments, exit and
 start Claude Code with the other directory. Disable any previously installed
 World ID plugin or manually added server for the other environment first.
@@ -90,23 +98,27 @@ Partner services require their own authorization.
 
 ## Development
 
-The staging package in `plugins/world-id/` is the shared source. After editing it,
-regenerate the self-contained sandbox package and commit both:
+Edit skills in `skills/` and the logo in `assets/`. The two directories under
+`plugins/` contain only environment-specific manifests and MCP configuration.
+Both variants use exactly the same skills; the endpoint is set in each variant's
+MCP configuration.
+
+After editing, rebuild and check the packages:
 
 ```sh
-python3 scripts/sync-sandbox-plugin.py
-python3 scripts/sync-sandbox-plugin.py --check
+python3 scripts/build-plugins.py
+python3 scripts/build-plugins.py --check
 ```
 
-The generated sandbox package changes only the plugin/server identity,
-environment labels, and hostname. Edit shared skills and assets in the staging
-source, not the generated copy. No local server or build step is required to
-install either committed package.
+`dist/` is generated and ignored by Git. Distribute the built marketplace or
+plugin directories, including the bundled skills and assets. No local server is
+required. Rebuild before reinstalling an updated plugin and start a new session.
 
 Each package includes portable `plugin.json` and `mcp.json` files, Codex's
 `.codex-plugin/plugin.json` and `.mcp.json`, and Claude Code's
 `.claude-plugin/plugin.json`. Both MCP files within a package point to the same
-environment. `.agents/plugins/marketplace.json` lists both Codex plugins.
+environment. The build copies `.agents/plugins/marketplace.json` into `dist/`
+to list both Codex plugins.
 
 See the [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
 and [Claude Code plugin reference](https://code.claude.com/docs/en/plugins-reference)

@@ -5,7 +5,7 @@ description: Get, connect, or check the user's World ID account. Use when the us
 
 # World ID Account
 
-Use this plugin's World ID connection at `https://sandbox.auth.world.org/mcp`.
+Use the World ID MCP connection bundled with this plugin.
 The environment is selected at setup. If the user requests another environment,
 explain how to switch plugins; do not silently use another World ID connection.
 
