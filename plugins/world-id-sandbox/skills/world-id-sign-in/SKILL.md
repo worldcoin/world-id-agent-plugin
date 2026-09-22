@@ -1,11 +1,11 @@
 ---
 name: world-id-sign-in
-description: Use when a browser reaches the World ID sign-in page at auth.worldcoin.dev.
+description: Use when a browser reaches the World ID sign-in page at sandbox.auth.world.org.
 ---
 
 # World ID sign-in
 
-This plugin connects to `https://auth.worldcoin.dev/mcp`. Follow the sign-in
+This plugin connects to `https://sandbox.auth.world.org/mcp`. Follow the sign-in
 flow for that environment; do not rewrite approval links to another host.
 
 If the page redirects you back to the app, continue.

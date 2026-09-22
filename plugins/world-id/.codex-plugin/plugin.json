@@ -1,17 +1,22 @@
 {
   "name": "world-id",
-  "version": "0.1.0",
-  "description": "Connect your World ID, check your account, discover benefits, and access World ID integration guidance.",
-  "author": { "name": "Tools for Humanity" },
+  "version": "0.1.0+codex.20260922185854",
+  "description": "World ID (Staging): connect your account, discover benefits, and access integration guidance.",
+  "author": {
+    "name": "Tools for Humanity"
+  },
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "World ID",
-    "shortDescription": "Connect and use your World ID.",
-    "longDescription": "Connect your World ID, check your account and verification status, discover published benefit offers, and read integration guidance from the World ID MCP server. Partner services require their own authorization; an offer listing does not confirm eligibility or redemption.",
+    "displayName": "World ID (Staging)",
+    "shortDescription": "Connect to World ID (Staging).",
+    "longDescription": "Use World ID (Staging) at https://auth.worldcoin.dev. Connect your account, discover published benefit offers, and read integration guidance. Enable only one World ID environment plugin at a time. Partner services require their own authorization; an offer listing does not confirm eligibility or redemption.",
     "developerName": "Tools for Humanity",
     "category": "Productivity",
-    "capabilities": ["OAuth", "Read"],
+    "capabilities": [
+      "OAuth",
+      "Read"
+    ],
     "defaultPrompt": [
       "Connect my World ID.",
       "What can I do with World ID?",

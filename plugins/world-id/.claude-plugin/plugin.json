@@ -1,5 +1,4 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "world-id",
   "version": "0.1.0+codex.20260922185854",
   "description": "World ID (Staging): connect your account, discover benefits, and access integration guidance.",
