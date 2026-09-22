@@ -83,12 +83,6 @@ What benefits are available?
 Help me use the maitre benefit, if available.
 ```
 
-Account checks and benefit discovery require World ID sign-in and OAuth consent
-for `mcp:read`. Public integration guides do not require sign-in. An empty catalog
-can mean no offers are published in sandbox yet; partners such as Maître must
-also be configured for sandbox. Partner services require their own authorization.
-A benefit listing does not confirm eligibility or successful redemption.
-
 ## MCP-only setup (without skills)
 
 Use this **instead of** the plugin if you only want the server tools. Do not add
