@@ -1,0 +1,12 @@
+{
+  "name": "world-id-demo",
+  "owner": { "name": "Tools for Humanity" },
+  "metadata": { "description": "World ID sandbox plugin for hackathon testing." },
+  "plugins": [
+    {
+      "name": "world-id-sandbox",
+      "source": "./plugins/world-id-sandbox",
+      "description": "Connect your sandbox World ID and discover sandbox benefits."
+    }
+  ]
+}

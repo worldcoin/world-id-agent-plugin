@@ -1,9 +1,9 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "world-id": {
+    "world-id-sandbox": {
       "type": "streamable-http",
-      "url": "https://auth.worldcoin.dev/mcp"
+      "url": "https://sandbox.auth.world.org/mcp"
     }
   }
 }
