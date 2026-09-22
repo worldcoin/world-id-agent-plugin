@@ -59,8 +59,7 @@ codex
 This authorizes World ID access separately from signing into Codex itself.
 Codex saves the OAuth credentials and uses them for MCP requests; never paste
 tokens into chat. You normally only repeat MCP login if authorization expires,
-is revoked, or Codex asks you to reconnect. See the
-[Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+is revoked, or Codex asks you to reconnect.
 
 #### Claude Code
 
