@@ -1,9 +1,12 @@
 ---
 name: world-id-sign-in
-description: Use when a browser reaches the World ID sign-in page at auth.worldcoin.dev.
+description: Use when a browser reaches the sandbox World ID sign-in page at sandbox.auth.world.org.
 ---
 
 # World ID sign-in
+
+This plugin is sandbox-only. Preserve approval links exactly as provided; do not
+rewrite them to staging or production hosts.
 
 If the page redirects you back to the app, continue.
 Otherwise, copy the page's **Approval link** and send it to your human for approval.

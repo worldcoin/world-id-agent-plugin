@@ -5,7 +5,10 @@ description: Get, connect, or check the user's World ID account. Use when the us
 
 # World ID Account
 
-1. Call `get_world_id_account` from the connected World ID MCP server with no arguments.
+This plugin uses the sandbox environment at `https://sandbox.auth.world.org/mcp`.
+Use its bundled MCP connection, not a staging or production World ID connection.
+
+1. Call `get_world_id_account` from this plugin's World ID MCP server with no arguments.
 2. If authorization is required, let the host show its native login and consent flow.
    World ID sign-in creates or resolves the account. Do not ask for credentials,
    proofs, tokens, or account identifiers in chat, or construct an authorization URL.

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "world-id",
+      "name": "world-id-sandbox",
       "source": {
         "source": "local",
-        "path": "./plugins/world-id"
+        "path": "./plugins/world-id-sandbox"
       },
       "policy": {
         "installation": "AVAILABLE",

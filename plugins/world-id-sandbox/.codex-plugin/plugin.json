@@ -1,0 +1,29 @@
+{
+  "name": "world-id-sandbox",
+  "version": "0.1.0+codex.20260922194559",
+  "description": "Connect your sandbox World ID, check your account, discover sandbox benefits, and access World ID integration guidance.",
+  "author": {
+    "name": "Tools for Humanity"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "World ID (Sandbox)",
+    "shortDescription": "Connect and use your sandbox World ID.",
+    "longDescription": "Connect your sandbox World ID, check your account and verification status, discover published sandbox benefit offers, and read integration guidance from the sandbox World ID MCP server. For hackathon testing, not production. Partner services require their own authorization; an offer listing does not confirm eligibility or redemption.",
+    "developerName": "Tools for Humanity",
+    "category": "Productivity",
+    "capabilities": [
+      "OAuth",
+      "Read"
+    ],
+    "defaultPrompt": [
+      "Connect my sandbox World ID.",
+      "What can I do with World ID in sandbox?",
+      "What sandbox benefits are available?"
+    ],
+    "brandColor": "#3155EE",
+    "composerIcon": "./assets/world-id.png",
+    "logo": "./assets/world-id.png"
+  }
+}
