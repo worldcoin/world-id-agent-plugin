@@ -1,0 +1,29 @@
+{
+  "name": "world-id-sandbox",
+  "version": "0.1.0+codex.20260922193001",
+  "description": "World ID (Sandbox): connect your account, discover benefits, and access integration guidance.",
+  "author": {
+    "name": "Tools for Humanity"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "World ID (Sandbox)",
+    "shortDescription": "Connect to World ID (Sandbox).",
+    "longDescription": "Use World ID (Sandbox) at https://sandbox.auth.world.org. Connect your account, discover published benefit offers, and read integration guidance. Enable only one World ID environment plugin at a time. Partner services require their own authorization; an offer listing does not confirm eligibility or redemption.",
+    "developerName": "Tools for Humanity",
+    "category": "Productivity",
+    "capabilities": [
+      "OAuth",
+      "Read"
+    ],
+    "defaultPrompt": [
+      "Connect my World ID.",
+      "What can I do with World ID?",
+      "What benefits are available?"
+    ],
+    "brandColor": "#3155EE",
+    "composerIcon": "./assets/world-id.png",
+    "logo": "./assets/world-id.png"
+  }
+}
