@@ -45,8 +45,7 @@ After installing the plugin, sign in to World ID using the steps below.
 
 #### Codex
 
-Run this in your terminal before starting Codex. If Codex is already running,
-exit it first:
+Run this in a terminal to authorize the MCP server:
 
 ```sh
 codex mcp login world-id-sandbox --scopes world-id:read
@@ -54,11 +53,18 @@ codex mcp login world-id-sandbox --scopes world-id:read
 
 Complete browser sign-in using your sandbox app and wait for the command to
 report success. If the browser does not open, open the URL printed by the command.
-Then start Codex:
+If Codex is not running, start it:
 
 ```sh
 codex
 ```
+
+If an agent session is already open, ask it to reconnect the World ID MCP server
+using its available host controls, refresh tool discovery, and check your account.
+Refreshing tool discovery does not necessarily reload credentials. If the host
+cannot reconnect in place, or the authenticated check still fails after reconnect,
+resume the conversation in a new session. A restart is a fallback, not a required
+step on every client.
 
 This authorizes World ID access separately from signing into Codex itself.
 Codex saves the OAuth credentials and uses them for MCP requests; never paste
@@ -96,14 +102,15 @@ the `world-id:read` scope used by account and benefit tools.
 
 ### Codex
 
-Before starting Codex, authorize developer access in your terminal:
+Authorize developer access in your terminal:
 
 ```sh
 codex mcp login world-id-sandbox --scopes developer-portal:manage
 ```
 
 Complete Google sign-in and portal consent, wait for the command to succeed,
-then start a new Codex session. If you also want account and benefit tools,
+then use the in-session recovery steps above. If you also want account and
+benefit tools,
 request both scopes with `--scopes world-id:read,developer-portal:manage`;
 that also requires sandbox World ID sign-in.
 
