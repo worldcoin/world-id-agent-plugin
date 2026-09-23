@@ -85,7 +85,27 @@ Send these prompts one at a time:
 Is my sandbox World ID connected?
 What benefits are available?
 Help me use the maitre benefit, if available.
+What can I do with Maître?
 ```
+
+### Using a partner benefit
+
+The plugin checks the sandbox World ID catalog first, then uses available
+partner MCP tools for capabilities, live availability, and supported actions.
+For example, a connected Maître `list_seats` tool supplies current tables;
+the catalog listing alone does not establish availability or a discount.
+
+This plugin bundles only the sandbox World ID MCP server. Partner MCP servers
+must be connected separately using their documented setup. World ID catalog
+authorization does not sign you into a partner. In Codex CLI, use
+`codex mcp login <partner-server-name>` for partner OAuth; in Claude Code,
+select that partner in `/mcp`. A tool error alone does not guarantee that a
+browser prompt opened.
+
+Maître may subsequently return a World ID verification link. Open the exact
+link the tool provides and use the same Google account as your Maître MCP
+connection. The agent follows the verification result before retrying an
+approved booking. This browser verification step is separate from MCP login.
 
 ## Developer setup
 
