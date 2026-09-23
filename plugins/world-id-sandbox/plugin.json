@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "world-id-sandbox",
-  "version": "0.1.0+build.20260922230128",
-  "description": "Connect your sandbox World ID, check your account, discover sandbox benefits, and access World ID integration guidance.",
+  "version": "0.1.0+build.20260923021338",
+  "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in.",
   "author": { "name": "Tools for Humanity" }
 }

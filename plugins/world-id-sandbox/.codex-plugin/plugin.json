@@ -1,7 +1,7 @@
 {
   "name": "world-id-sandbox",
-  "version": "0.1.0+build.20260922230128",
-  "description": "Connect your sandbox World ID, check your account, discover sandbox benefits, and access World ID integration guidance.",
+  "version": "0.1.0+build.20260923021338",
+  "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in.",
   "author": {
     "name": "Tools for Humanity"
   },
@@ -9,17 +9,18 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "World ID (Sandbox)",
-    "shortDescription": "Connect and use your sandbox World ID.",
-    "longDescription": "Connect your sandbox World ID, check your account and verification status, discover published sandbox benefit offers, and read integration guidance from the sandbox World ID MCP server. For hackathon testing, not production. Partner services require their own authorization; an offer listing does not confirm eligibility or redemption.",
+    "shortDescription": "Use World ID and register apps in sandbox.",
+    "longDescription": "Connect your sandbox World ID, discover published benefits, and register or configure apps through the sandbox World ID MCP server. Developer tools use Google portal sign-in; registration requires human approval and secrets stay in the browser. Includes integration guidance and directions for submitting catalog listings in the portal. For hackathon testing, not production. An offer listing does not confirm eligibility or redemption.",
     "developerName": "Tools for Humanity",
     "category": "Productivity",
     "capabilities": [
       "OAuth",
-      "Read"
+      "Read",
+      "Write"
     ],
     "defaultPrompt": [
       "Connect my sandbox World ID.",
-      "What can I do with World ID in sandbox?",
+      "Register my sandbox app with World ID.",
       "What sandbox benefits are available?"
     ],
     "brandColor": "#3155EE",
