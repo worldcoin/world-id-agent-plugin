@@ -39,7 +39,8 @@ claude plugin marketplace add worldcoin/world-id-agent-plugin
 claude plugin install world-id-sandbox@world-id-demo
 ```
 
-After installing the plugin, sign in to World ID using the steps below.
+Installing the plugin does not sign you in. After installing, authorize World
+ID with `claude mcp login` using the steps below.
 
 ### 2. Authorize World ID and launch your agent
 
@@ -67,15 +68,38 @@ is revoked, or Codex asks you to reconnect.
 
 #### Claude Code
 
-Launch Claude Code:
+Run this in your terminal before starting Claude Code. If Claude Code is already
+running, exit it first:
+
+```sh
+claude mcp login plugin:world-id-sandbox:world-id-sandbox
+```
+
+This is the Claude Code equivalent of `codex mcp login`. The server name carries
+a `plugin:world-id-sandbox:` prefix because the plugin supplies it; run
+`claude mcp list` to see the exact name. Complete browser sign-in using your
+sandbox app and wait for the command to report success. If asked how to connect,
+choose **Connect World ID**. On an SSH or headless machine, add `--no-browser` to
+print the authorization URL and paste the redirect URL back when prompted.
+Claude Code has no `--scopes` option; this sign-in grants `world-id:read`, and
+developer access is authorized separately (see
+[Developer setup](#developer-setup)). Then start Claude Code:
 
 ```sh
 claude
 ```
 
-Enter `/mcp`, select the sandbox World ID server, and authenticate. If asked how
-to connect, choose **Connect World ID**. Complete World ID sign-in and consent
-before continuing. `codex mcp login` does not authenticate Claude Code.
+Alternatively, start `claude` first, enter `/mcp`, select the sandbox World ID
+server, and choose **Authenticate**. Either path stores the OAuth credentials and
+uses them for MCP requests; never paste tokens into chat. `codex mcp login` does
+not authenticate Claude Code.
+
+`/mcp` and `claude mcp list` report the server as **Connected** even before you
+sign in, because the server accepts anonymous connections and only requires
+World ID for protected tools. To confirm you are signed in, ask
+`Is my sandbox World ID connected?` in a session. If tools fail with
+"Sign in with World ID and allow access to continue", exit Claude Code and run
+`claude mcp login plugin:world-id-sandbox:world-id-sandbox` again.
 
 ### 3. Try it
 
@@ -112,7 +136,9 @@ that also requires sandbox World ID sign-in.
 Ask to register or configure your app. Follow the portal tool's authorization
 challenge for `developer-portal:manage` and complete Google sign-in and consent.
 If authentication is needed, use `/mcp` to select and authenticate the sandbox
-World ID server. World ID-only authorization does not grant developer access.
+World ID server, or exit Claude Code and run
+`claude mcp login plugin:world-id-sandbox:world-id-sandbox`. World ID-only
+authorization does not grant developer access.
 
 ### Register or configure an app
 
