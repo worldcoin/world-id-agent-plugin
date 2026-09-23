@@ -67,15 +67,22 @@ is revoked, or Codex asks you to reconnect.
 
 #### Claude Code
 
-Launch Claude Code:
+Run this in your terminal before starting Claude Code:
+
+```sh
+claude mcp login plugin:world-id-sandbox:world-id-sandbox
+```
+
+Complete World ID sign-in in the browser. If asked how to connect, choose
+**Connect World ID**. Then start Claude Code:
 
 ```sh
 claude
 ```
 
-Enter `/mcp`, select the sandbox World ID server, and authenticate. If asked how
-to connect, choose **Connect World ID**. Complete World ID sign-in and consent
-before continuing. `codex mcp login` does not authenticate Claude Code.
+You can also sign in from inside Claude Code: enter `/mcp`, select the sandbox
+World ID server, and authenticate. `codex mcp login` does not authenticate
+Claude Code.
 
 ### 3. Try it
 
