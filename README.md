@@ -79,8 +79,8 @@ This is the Claude Code equivalent of `codex mcp login`. The server name carries
 a `plugin:world-id-sandbox:` prefix because the plugin supplies it; run
 `claude mcp list` to see the exact name. Complete browser sign-in using your
 sandbox app and wait for the command to report success. If asked how to connect,
-choose **Connect World ID**. On an SSH or headless machine, add `--no-browser` to
-print the authorization URL and paste the redirect URL back when prompted.
+choose **Connect World ID**. On an SSH or headless machine, add `--no-browser`
+to print the authorization URL and paste the redirect URL back when prompted.
 Claude Code has no `--scopes` option; this sign-in grants `world-id:read`, and
 developer access is authorized separately (see
 [Developer setup](#developer-setup)). Then start Claude Code:
@@ -90,9 +90,9 @@ claude
 ```
 
 Alternatively, start `claude` first, enter `/mcp`, select the sandbox World ID
-server, and choose **Authenticate**. Either path stores the OAuth credentials and
-uses them for MCP requests; never paste tokens into chat. `codex mcp login` does
-not authenticate Claude Code.
+server, and choose **Authenticate**. Either path stores the OAuth credentials
+and uses them for MCP requests; never paste tokens into chat. `codex mcp login`
+does not authenticate Claude Code.
 
 `/mcp` and `claude mcp list` report the server as **Connected** even before you
 sign in, because the server accepts anonymous connections and only requires
