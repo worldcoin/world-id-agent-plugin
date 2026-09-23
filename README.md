@@ -39,13 +39,16 @@ After installing the plugin, sign in to World ID using the steps below.
 
 ### 2. Authorize World ID and launch your agent
 
+Already connected before the scope migration? Existing connections were revoked.
+Repeat the authorization steps below to reconnect with `world-id:read`.
+
 #### Codex
 
 Run this in your terminal before starting Codex. If Codex is already running,
 exit it first:
 
 ```sh
-codex mcp login world-id-sandbox --scopes mcp:read
+codex mcp login world-id-sandbox --scopes world-id:read
 ```
 
 Complete browser sign-in using your sandbox app and wait for the command to
@@ -69,9 +72,9 @@ Launch Claude Code:
 claude
 ```
 
-Enter `/mcp`, select the sandbox World ID server, and authenticate. Complete
-World ID sign-in and consent before continuing. `codex mcp login` does not
-authenticate Claude Code.
+Enter `/mcp`, select the sandbox World ID server, and authenticate. If asked how
+to connect, choose **Connect World ID**. Complete World ID sign-in and consent
+before continuing. `codex mcp login` does not authenticate Claude Code.
 
 ### 3. Try it
 
