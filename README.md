@@ -39,9 +39,6 @@ After installing the plugin, sign in to World ID using the steps below.
 
 ### 2. Authorize World ID and launch your agent
 
-Already connected before the scope migration? Existing connections were revoked.
-Repeat the authorization steps below to reconnect with `world-id:read`.
-
 #### Codex
 
 Run this in your terminal before starting Codex. If Codex is already running,
