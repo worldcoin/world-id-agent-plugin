@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "world-id-sandbox": {
-      "type": "http",
-      "url": "https://sandbox.auth.world.org/mcp"
-    }
-  }
-}

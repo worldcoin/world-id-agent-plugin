@@ -144,7 +144,7 @@ def sync_outputs(root, outputs, check=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="Fail if committed outputs differ; write nothing")
+    parser.add_argument("--check", action="store_true", help="Fail if generated outputs differ; write nothing")
     args = parser.parse_args()
     try:
         outputs = build_outputs(ROOT)

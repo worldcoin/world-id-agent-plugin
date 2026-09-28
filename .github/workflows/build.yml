@@ -1,4 +1,4 @@
-name: Validate generated plugins
+name: Build and validate plugins
 
 on:
   pull_request:
@@ -16,5 +16,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - run: python3 scripts/build.py
       - run: python3 -m unittest discover -s scripts -p 'test_*.py'
       - run: python3 scripts/build.py --check
+      - name: Check tracked marketplace catalogs
+        run: git diff --exit-code -- .agents/plugins/marketplace.json .claude-plugin/marketplace.json
+      - name: Upload production plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-id-${{ github.sha }}
+          path: plugins/world-id/
+          include-hidden-files: true
+          if-no-files-found: error
+      - name: Upload sandbox plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-id-sandbox-${{ github.sha }}
+          path: plugins/world-id-sandbox/
+          include-hidden-files: true
+          if-no-files-found: error

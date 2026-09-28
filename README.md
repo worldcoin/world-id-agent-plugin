@@ -13,10 +13,26 @@ and authorization. Choose the environment you intend to use; test accounts and
 app registrations belong to that environment. When testing, enable only the
 intended plugin to avoid ambiguous skill selection.
 
-## Getting started
+## Install from source
 
-You need Git and either Codex CLI (`codex`) or Claude Code (`claude`) installed
-and signed in. **No manual clone, build, Python, or local server is required.**
+Production is the only plugin intended for OpenAI's public directory. Sandbox is
+for development and testing. Until production is published, use the local build
+below; after publication, production users can install through the directory.
+
+For installation from source, you need Git, Python 3.10 or newer, and either
+Codex CLI (`codex`) or Claude Code (`claude`) installed and signed in. The build
+uses only Python's standard library. No local MCP server is required.
+
+Clone and build both packages:
+
+```sh
+git clone https://github.com/worldcoin/world-id-agent-plugin.git
+cd world-id-agent-plugin
+python3 scripts/build.py
+```
+
+Generated packages are ignored by Git. Installing this repository directly as
+a remote marketplace will not work; add the local checkout after building.
 
 For account and benefit tools, complete the World ID verification flow in your
 chosen environment. Sandbox requires its own test proof-of-human setup. For app
@@ -32,10 +48,10 @@ Claude Code's `plugin:world-id:world-id` server name. The marketplace name remai
 
 #### Codex
 
-Run in your terminal:
+From the repository root, run:
 
 ```sh
-codex plugin marketplace add worldcoin/world-id-agent-plugin
+codex plugin marketplace add .
 codex plugin add world-id@world-id-demo
 ```
 
@@ -43,10 +59,10 @@ If `codex plugin` is unrecognized, update your Codex CLI before continuing.
 
 #### Claude Code
 
-Run in your terminal:
+From the repository root, run:
 
 ```sh
-claude plugin marketplace add worldcoin/world-id-agent-plugin
+claude plugin marketplace add .
 claude plugin install world-id@world-id-demo
 ```
 
@@ -154,10 +170,9 @@ it is published. Catalog submission is not currently exposed through MCP.
 ## Development
 
 Development happens in this public repository on short-lived feature branches.
-Edit the sources, regenerate both packages, and commit the sources and outputs
-in the same pull request. Python 3.10 or newer is needed only by maintainers;
-plugin users do not need Python or a build step. No Python dependencies are
-required.
+Edit the sources and regenerate both packages. Commit the shared source files,
+environment configuration, and small marketplace catalogs. The generated
+`plugins/` directory stays out of Git.
 
 ```text
 src/plugin.json           Shared metadata and release version
@@ -181,7 +196,10 @@ python3 -m unittest discover -s scripts -p 'test_*.py'
 ```
 
 `--check` writes nothing and fails if an output is missing, modified, or stale.
-CI runs this check and the regression tests on pull requests and pushes to main.
+CI builds both packages, runs this check and the regression tests, and verifies
+the tracked marketplace catalogs on pull requests and pushes to main. Successful
+runs upload separate production and sandbox artifacts, including their hidden
+manifest files, named with the workflow's commit SHA.
 The build fails on missing template values, invalid environment configuration,
 or identical sandbox and production endpoint settings. Both hosts' manifests
 get their version from `src/plugin.json`; update it when distributing changed
@@ -189,20 +207,29 @@ plugin content.
 
 ### Share a test build
 
-Push the branch with its generated packages committed. Colleagues can select
-that Git ref when adding the marketplace:
+Push the source changes. Colleagues can check out the branch or exact commit,
+build it, and install sandbox from the local checkout:
 
 ```sh
-codex plugin marketplace add worldcoin/world-id-agent-plugin --ref feature/my-change
+git fetch origin
+git switch feature/my-change
+python3 scripts/build.py
+codex plugin marketplace add .
 codex plugin add world-id-sandbox@world-id-demo
 ```
 
-Substitute the actual branch or a release tag for `feature/my-change`. This
-selects a revision of the existing marketplace; it does not create a second
-marketplace identity. Verify the selected source with
-`codex plugin marketplace list`, refresh/reinstall after changes, and start a
-new session to test the installed copy. Follow the sandbox authentication
-instructions above. Test behavior in both Codex and Claude Code before release.
+Substitute the actual branch for `feature/my-change`. If this marketplace was
+previously installed from Git, verify that the source now points at the local
+checkout with `codex plugin marketplace list`. Rebuild and reinstall after
+changes, and start a new session to test the installed copy. Follow the sandbox
+authentication instructions above. Test behavior in both Codex and Claude Code
+before release.
+
+Alternatively, download an artifact from the successful GitHub Actions run and
+extract it into the matching `plugins/world-id/` or `plugins/world-id-sandbox/`
+directory of a checkout at that run's commit. Each artifact contains one plugin's
+contents at its root, including dotfiles. The local marketplace catalogs point
+to those directories. Download both artifacts to make both entries installable.
 
 ### Prepare a production release
 
@@ -211,8 +238,11 @@ instructions above. Test behavior in both Codex and Claude Code before release.
 2. Set the release version in `src/plugin.json`, regenerate, and run the checks.
 3. Smoke-test the generated `world-id` package with designated production test
    accounts. Package validation does not verify backend availability or OAuth.
-4. Merge the reviewed changes and tag the tested commit. For stable Git-based
-   distribution, consumers can select that release tag with `--ref`.
+4. Merge the reviewed changes and tag the tested commit. Build from that commit
+   or retrieve its successful CI artifacts. Retain the release packages outside
+   temporary CI artifact storage, and submit only `world-id` to OpenAI for review
+   and publication. Keep sandbox available for team testing through local builds
+   and CI artifacts.
 
 A Git push does not submit a plugin to OpenAI's public directory. Directory
 publication and remote MCP backend deployments are separate release steps.
