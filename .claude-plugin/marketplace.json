@@ -1,12 +1,21 @@
 {
   "name": "world-id-demo",
-  "owner": { "name": "Tools for Humanity" },
-  "metadata": { "description": "World ID sandbox plugin for hackathon testing." },
+  "owner": {
+    "name": "Tools for Humanity"
+  },
+  "metadata": {
+    "description": "World ID plugins for production and sandbox."
+  },
   "plugins": [
     {
       "name": "world-id-sandbox",
       "source": "./plugins/world-id-sandbox",
-      "description": "Connect your sandbox World ID and discover sandbox benefits."
+      "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in."
+    },
+    {
+      "name": "world-id",
+      "source": "./plugins/world-id",
+      "description": "Connect your World ID, discover benefits, and register and configure apps with World ID sign-in."
     }
   ]
 }

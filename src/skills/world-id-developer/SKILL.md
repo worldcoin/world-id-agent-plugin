@@ -1,14 +1,14 @@
 ---
 name: world-id-developer
-description: Register a sandbox app with World ID or configure its OIDC client, callback URLs, and logo. Use for developer onboarding and Sign in with World ID integration setup, including explaining how to submit the app's benefit listing. Not for checking a person's World ID or finding benefits to use.
+description: Register a {{environment}} app with World ID or configure its OIDC client, callback URLs, and logo. Use for developer onboarding and Sign in with World ID integration setup, including explaining how to submit the app's benefit listing. Not for checking a person's World ID or finding benefits to use.
 ---
 
 # World ID developer
 
-Use this plugin's MCP connection at `https://sandbox.auth.world.org/mcp`.
+Use this plugin's MCP connection at `{{mcp_url}}`.
 Perform registration and configuration through its tools. Browser control is
 not required: the developer signs in and approves credential requests themselves.
-Keep all operations in sandbox; never switch environments.
+Keep all operations in {{environment}}; never switch environments.
 
 ## Connect the developer account
 
@@ -19,11 +19,11 @@ they do not require a World ID or `world-id:read`.
 If authorization is needed, use the host's MCP authorization flow and follow the
 tool's scope challenge, preserving existing scopes. If the host cannot complete it:
 
-- Codex users can run `codex mcp login world-id-sandbox --scopes developer-portal:manage`
+- Codex users can run `codex mcp login {{name}} --scopes developer-portal:manage`
   in their terminal, complete Google sign-in and consent, then start a new Codex
   session. If they also use account/benefit tools, use
   `--scopes world-id:read,developer-portal:manage` to authorize both flows.
-- Claude Code users can select the sandbox server in `/mcp` and authenticate
+- Claude Code users can select the {{environment}} server in `/mcp` and authenticate
   for the requested developer-portal scope.
 
 Resume after reconnection. Do not retry an authorization failure in a loop or
@@ -70,7 +70,7 @@ ask for tokens in chat.
    confirms success; use `request.result.client` for the public client details.
    Report a terminal failure rather than silently starting another registration.
 
-Return the client ID, sandbox issuer `https://sandbox.auth.world.org`, registered
+Return the client ID, {{environment}} issuer `{{issuer}}`, registered
 callbacks, and authentication method. Link to the client's portal page. If the
 developer also asks for implementation, use the `oidc` guide, or `federation` for
 an existing identity provider, and work within their app's existing auth setup.
@@ -87,7 +87,7 @@ immutable sector. Report a change only after the tool succeeds; reads may lag.
 
 App registration does not publish a benefit. The current MCP has no catalog
 submission tool. Direct the developer to
-`https://sandbox.auth.world.org/portal/clients/{clientId}?tab=catalog` using the
+`{{portal_url}}/clients/{clientId}?tab=catalog` using the
 actual client ID: save the listing name, description, and app URL, then submit
 for review. Only the owner of an active app can submit. A separate authorized
 reviewer who is not an app member must approve it; approval publishes the listing.

@@ -1,0 +1,30 @@
+{
+  "name": "world-id",
+  "version": "0.2.0",
+  "description": "Connect your World ID, discover benefits, and register and configure apps with World ID sign-in.",
+  "author": {
+    "name": "Tools for Humanity"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "World ID",
+    "shortDescription": "Use World ID and register apps in production.",
+    "longDescription": "Connect your production World ID, discover published benefits, and register or configure apps through the production World ID MCP server. Developer tools use Google portal sign-in; registration requires human approval and secrets stay in the browser. Includes integration guidance and directions for submitting catalog listings in the portal. Uses production accounts and data. An offer listing does not confirm eligibility or redemption.",
+    "developerName": "Tools for Humanity",
+    "category": "Productivity",
+    "capabilities": [
+      "OAuth",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Connect my World ID.",
+      "Register my app with World ID.",
+      "What benefits are available?"
+    ],
+    "brandColor": "#3155EE",
+    "composerIcon": "./assets/world-id.png",
+    "logo": "./assets/world-id.png"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "world-id": {
+      "type": "http",
+      "url": "https://auth.worldcoin.dev/mcp"
+    }
+  }
+}
