@@ -70,6 +70,11 @@ After installing the plugin, sign in to World ID using the steps below.
 
 ### 2. Authorize World ID and launch your agent
 
+By continuing with World ID sign-up, sign-in, or connection, you agree to the
+[World Foundation User Terms and Conditions](https://world.org/legal/user-terms-and-conditions)
+and acknowledge the
+[World Foundation Privacy Notice](https://world.org/legal/privacy-notice).
+
 #### Codex
 
 Run this in your terminal before starting Codex. If Codex is already running,
@@ -127,6 +132,11 @@ The bundled `world-id-developer` skill registers OIDC clients and updates
 their callback URLs, name, and logo through MCP tools. Developer access uses
 Google portal sign-in and the `developer-portal:manage` scope, separately from
 the `world-id:read` scope used by account and benefit tools.
+
+By continuing with developer-portal sign-up or sign-in, you agree to the
+[World Foundation User Terms and Conditions](https://world.org/legal/user-terms-and-conditions)
+and acknowledge the
+[World Foundation Privacy Notice](https://world.org/legal/privacy-notice).
 
 ### Codex
 

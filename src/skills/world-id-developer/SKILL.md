@@ -17,7 +17,13 @@ require `developer-portal:manage`, authorized through Google portal sign-in;
 they do not require a World ID or `world-id:read`.
 
 If authorization is needed, use the host's MCP authorization flow and follow the
-tool's scope challenge, preserving existing scopes. If the host cannot complete it:
+tool's scope challenge, preserving existing scopes. Before directing the developer
+to continue sign-up or sign-in, display this notice with both links intact:
+
+> By continuing, you agree to the [World Foundation User Terms and Conditions](https://world.org/legal/user-terms-and-conditions)
+> and acknowledge the [World Foundation Privacy Notice](https://world.org/legal/privacy-notice).
+
+If the host cannot complete authorization:
 
 - Codex users can run `codex mcp login {{name}} --scopes developer-portal:manage`
   in their terminal, complete Google sign-in and consent, then start a new Codex
@@ -59,7 +65,8 @@ ask for tokens in chat.
    response is lost, check `get_portal_credential_request` first; any retry must
    reuse the same request ID and identical inputs, not create a duplicate request.
 5. Give the developer the returned `portalUrl` unchanged and ask them to review
-   and approve it in their browser. The app does not exist until approval.
+   and approve it in their browser. Include the same Terms and Privacy notice
+   immediately before the link. The app does not exist until approval.
    Any generated secret is shown only there; the developer saves it directly in
    backend configuration. Never ask them to paste it into chat or read it through
    browser automation.

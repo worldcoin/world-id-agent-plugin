@@ -41,6 +41,9 @@ class BuildTests(unittest.TestCase):
                     self.assertNotIn(wrong_host.encode(), content, str(path))
                     self.assertNotIn(b"{{", content, str(path))
             self.assertIn(base / "skills/world-id-sign-in/SKILL.md", outputs)
+            sign_in = outputs[base / "skills/world-id-sign-in/SKILL.md"]
+            self.assertIn(b"https://world.org/legal/user-terms-and-conditions", sign_in)
+            self.assertIn(b"https://world.org/legal/privacy-notice", sign_in)
 
     def test_check_detects_edits_and_stale_files_without_writing(self):
         outputs = build.build_outputs(self.root)
