@@ -1,6 +1,6 @@
 ---
 name: world-id-account
-description: Check the user's connected World ID account. Use when the user asks "what's my World ID?", requests their World ID identifier or continuity handle, or wants to check their World ID connection or verification status.
+description: Report only whether the user's World ID account is connected. Use when the user asks about their World ID account, identifier, continuity handle, connection, or verification status.
 ---
 
 # World ID Account
@@ -9,14 +9,19 @@ This plugin uses the sandbox environment at `https://sandbox.auth.world.org/mcp`
 Use its bundled MCP connection, not a staging or production World ID connection.
 MCP authentication is a setup prerequisite, handled outside this skill.
 
+Only report connection status to the user, even when they explicitly request an
+identifier or account details. Never disclose `continuity_handle` or any other
+personal account identifier, including partial or transformed values. Do not
+quote raw tool responses or errors, which may contain identifiers.
+
 1. Call `get_world_id_account` from this plugin's World ID MCP server with no arguments.
 2. If authorization is required, report that the MCP connection is not authorized,
    refer the user to the README's setup instructions, and stop. Do not initiate
    login or repeatedly retry the tool.
-3. Report a connected account
+3. For a successful, complete response, say "Your World ID account is connected."
    only when it returns `status: active` and `world_id_verified: true` without an error.
-   When the user asks for their World ID, return `continuity_handle` and describe it as
-   their sector-specific continuity handle, not a global or internal account ID. This
-   confirms prior verification, not fresh human presence or that the agent is human.
-4. If the tool fails, explain the error briefly; do not report a connected account.
+   Otherwise, say "Your World ID account is not connected."
+4. If the tool fails or the status fields are missing or invalid, say that you
+   couldn't determine whether the account is connected. Briefly summarize any
+   actionable cause without including account identifiers or raw error details.
    Never ask for credentials, proofs, tokens, or account identifiers in chat.
