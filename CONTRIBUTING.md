@@ -48,19 +48,6 @@ Retry failed runs with the same SHA; unchanged branches and open PRs are reused.
 Inspect and reopen closed release PRs before retrying. To undo a release, revert
 on `dev` and publish a new version.
 
-## One-time setup
-
-1. Merge this layout and its workflows into `main`. Create `dev` and `sandbox`
-   from that commit. Keep `main` as default; it becomes production after the
-   first production release PR merges.
-2. Protect all three branches with required reviews and validation. Require
-   release PRs to be up to date before merging.
-3. Set repository secret `PLUGIN_RELEASE_TOKEN` to a fine-grained token limited
-   to this repository, with **Contents**, **Pull requests** and **Workflows**
-   read/write permissions. No branch-protection bypass is needed.
-4. Move existing sandbox installs to branch `sandbox` before releasing production.
-   Sandbox keeps marketplace name `world-id-demo`; production uses `world-id`.
-
 ## User installation
 
 After the first production release, developers can ask Codex:
