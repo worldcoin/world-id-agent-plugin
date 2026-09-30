@@ -5,7 +5,7 @@ description: Report only whether the user's World ID account is connected. Use w
 
 # World ID Account
 
-This plugin uses the {{environment}} environment at `{{mcp_url}}`.
+This plugin uses the sandbox environment at `https://sandbox.auth.world.org/mcp`.
 Use only its bundled MCP connection; never switch environments.
 MCP authentication is a setup prerequisite, handled outside this skill.
 

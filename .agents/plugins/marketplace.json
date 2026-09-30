@@ -8,19 +8,7 @@
       "name": "world-id-sandbox",
       "source": {
         "source": "local",
-        "path": "./plugins/world-id-sandbox"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    },
-    {
-      "name": "world-id",
-      "source": {
-        "source": "local",
-        "path": "./plugins/world-id"
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",
