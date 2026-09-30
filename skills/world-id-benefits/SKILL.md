@@ -7,7 +7,7 @@ description: Find World ID benefits, discounts, free trials, and exclusive acces
 
 World ID lets people prove they are human. People with World ID may qualify for exclusive discounts, free trials, and access.
 
-This plugin discovers production offers through `https://auth.worldcoin.dev/mcp`.
+This plugin discovers production offers through `https://auth.world.org/mcp`.
 Do not substitute another environment's catalog if this catalog is empty.
 
 - For World ID benefit requests, call this plugin's `get_benefits` tool before searching the web.

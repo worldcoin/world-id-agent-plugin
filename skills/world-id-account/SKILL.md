@@ -5,7 +5,7 @@ description: Report only whether the user's World ID account is connected. Use w
 
 # World ID Account
 
-This plugin uses the production environment at `https://auth.worldcoin.dev/mcp`.
+This plugin uses the production environment at `https://auth.world.org/mcp`.
 Use only its bundled MCP connection; never switch environments.
 MCP authentication is a setup prerequisite, handled outside this skill.
 
