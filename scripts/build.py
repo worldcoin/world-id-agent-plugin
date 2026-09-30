@@ -101,11 +101,13 @@ def validate_package(files, config, other):
     if not any(path.name == "SKILL.md" for path in files):
         raise ValueError("Plugin contains no skills")
     wrong_host = urlsplit(other["issuer"]).netloc.encode()
+    # The production host can be a suffix of the sandbox host.
+    wrong_host_pattern = re.compile(rb"(?<![\w.-])" + re.escape(wrong_host), re.IGNORECASE)
     for path, data in files.items():
         if path.suffix in (".json", ".md"):
             if b"{{" in data or b"}}" in data:
                 raise ValueError(f"{path}: unresolved template marker")
-            if wrong_host in data:
+            if wrong_host_pattern.search(data):
                 raise ValueError(f"{path}: references the other environment's host")
     return identity["version"]
 
