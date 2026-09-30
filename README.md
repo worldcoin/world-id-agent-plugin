@@ -121,6 +121,9 @@ What benefits are available?
 Help me use the maitre benefit, if available.
 ```
 
+Account questions return only whether your World ID is connected. The account
+skill never displays your continuity handle or other personal account identifiers.
+
 ## Developer setup
 
 The bundled `world-id-developer` skill registers OIDC clients and updates
