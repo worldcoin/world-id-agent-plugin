@@ -134,7 +134,9 @@ def build_outputs(root, source_sha=None):
         files = dict(source_files)
         if environment == "production":
             render = replacements(configs["sandbox"], config)
-            files = {path: render(data.decode()).encode() if path.suffix in (".md", ".json") else data
+            # The README documents both installations and is shared unchanged.
+            files = {path: render(data.decode()).encode()
+                     if path != Path("README.md") and path.suffix in (".md", ".json") else data
                      for path, data in files.items()}
         other = configs["production" if environment == "sandbox" else "sandbox"]
         validate_package(files, config, other)

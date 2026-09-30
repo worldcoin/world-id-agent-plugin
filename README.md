@@ -1,155 +1,143 @@
-# World ID (Sandbox)
+# World ID
 
-Connect your sandbox World ID, discover partner benefits, or register and
-configure your app's World ID sign-in from Codex or Claude Code. This plugin uses
-[`https://sandbox.auth.world.org/mcp`](https://sandbox.auth.world.org/mcp).
+Connect your World ID, discover partner benefits, and register or configure
+apps with World ID sign-in from Codex or Claude Code.
 
-You can ask your agent:
+**Production** uses real accounts and data. **Sandbox** is a separate environment
+for testing, with its own accounts and app registrations. Use production by
+default and sandbox when testing.
+
+| Environment | Git branch | Plugin | Marketplace |
+| --- | --- | --- | --- |
+| Production | `main` | `world-id` | `world-id` |
+| Sandbox | `sandbox` | `world-id-sandbox` | `world-id-demo` |
+
+## Install
+
+Give your coding agent this prompt:
 
 ```text
-Install the plugin at https://github.com/worldcoin/world-id-agent-plugin/tree/sandbox
+Install this plugin: https://github.com/worldcoin/world-id-agent-plugin
 ```
 
-The agent should select the branch named in the URL and follow the installation
-steps below. Installation still requires your own authorization when prompted.
-
-## Getting started
+For sandbox, ask it to install from the `sandbox` branch instead.
 
 You need Git and either Codex CLI (`codex`) or Claude Code (`claude`) installed
-and signed in. **No manual clone, build, Python, or local server is required.**
+and signed in. **No Python, manual clone, build step or local server is needed.**
+The release branches contain the complete plugin.
 
-For account and benefit tools, complete World ID verification and sign in
-using the app for this plugin's sandbox environment. For app registration,
-install the same plugin below, then follow [Developer setup](#developer-setup);
-only Google portal sign-in is required.
+### Instructions for coding agents
 
-### 1. Install the plugin (choose your agent)
+Use the commands for the user's coding agent and requested environment below.
+Default to production on `main`. If the user supplies a `dev` or feature-branch
+URL, use that Git ref with the sandbox commands and plugin name. Follow the
+sign-in steps after installation and have the user complete browser authorization.
 
-#### Codex
+### Codex
 
-Run in your terminal:
+Production:
+
+```sh
+codex plugin marketplace add worldcoin/world-id-agent-plugin --ref main
+codex plugin add world-id@world-id
+```
+
+Sandbox:
 
 ```sh
 codex plugin marketplace add worldcoin/world-id-agent-plugin --ref sandbox
 codex plugin add world-id-sandbox@world-id-demo
 ```
 
-If `codex plugin` is unrecognized, update your Codex CLI before continuing.
+If `codex plugin` is unavailable, update Codex CLI before installing.
 
-#### Claude Code
+### Claude Code
 
-Run in your terminal:
+Production:
+
+```sh
+claude plugin marketplace add https://github.com/worldcoin/world-id-agent-plugin.git#main
+claude plugin install world-id@world-id
+```
+
+Sandbox:
 
 ```sh
 claude plugin marketplace add https://github.com/worldcoin/world-id-agent-plugin.git#sandbox
 claude plugin install world-id-sandbox@world-id-demo
 ```
 
-After installing the plugin, sign in to World ID using the steps below.
+## Sign in
 
-### 2. Authorize World ID and launch your agent
+Account and benefit tools require World ID verification in the selected
+environment. Sandbox verification is separate from production. If you only need
+app registration, go to [Developer access](#developer-access).
 
-#### Codex
-
-Run this in your terminal before starting Codex. If Codex is already running,
-exit it first:
-
-```sh
-codex mcp login world-id-sandbox --scopes world-id:read
-```
-
-Complete browser sign-in using your sandbox app and wait for the command to
-report success. If the browser does not open, open the URL printed by the command.
-Then start Codex:
+For **Codex**, exit any running session, then authorize the installed plugin:
 
 ```sh
-codex
+codex mcp login world-id --scopes world-id:read
 ```
 
-This authorizes World ID access separately from signing into Codex itself.
-Codex saves the OAuth credentials and uses them for MCP requests; never paste
-tokens into chat. You normally only repeat MCP login if authorization expires,
-is revoked, or Codex asks you to reconnect.
+For sandbox, use `world-id-sandbox` in place of `world-id`.
 
-#### Claude Code
-
-Run this in your terminal before starting Claude Code:
+For **Claude Code**, authorize the installed plugin:
 
 ```sh
-claude mcp login plugin:world-id-sandbox:world-id-sandbox
+claude mcp login plugin:world-id:world-id
 ```
 
-Complete World ID sign-in in the browser. If asked how to connect, choose
-**Connect World ID**. Then start Claude Code:
+For sandbox, use `plugin:world-id-sandbox:world-id-sandbox`. You can also run
+`/mcp` inside Claude Code, select the matching World ID server, and authenticate.
 
-```sh
-claude
-```
+Complete browser sign-in and wait for success. If the browser does not open,
+follow the URL printed by the command. Start a new Codex or Claude Code session
+after installation and sign-in. Each host manages its own authorization.
 
-You can also sign in from inside Claude Code: enter `/mcp`, select the sandbox
-World ID server, and authenticate. `codex mcp login` does not authenticate
-Claude Code.
-
-### 3. Try it
-
-Send these prompts one at a time:
+Try asking:
 
 ```text
-Is my sandbox World ID connected?
+Is my World ID connected?
 What benefits are available?
-Help me use the maitre benefit, if available.
 ```
 
-Account questions return only whether your World ID is connected. The account
-skill never displays your continuity handle or other personal account identifiers.
+Account replies report connection status only; they do not expose personal
+account identifiers. Keep tokens and credentials out of chat.
 
-## Developer setup
+## Developer access
 
-The bundled `world-id-developer` skill registers sandbox OIDC clients and updates
-their callback URLs, name, and logo through MCP tools. Developer access uses
-Google portal sign-in and the `developer-portal:manage` scope, separately from
-the `world-id:read` scope used by account and benefit tools.
+App registration and configuration use Google developer-portal sign-in with the
+`developer-portal:manage` scope. World ID verification is not required for these
+operations.
 
-### Codex
-
-Before starting Codex, authorize developer access in your terminal:
+For **Codex**, authorize developer access before starting a new session:
 
 ```sh
-codex mcp login world-id-sandbox --scopes developer-portal:manage
+codex mcp login world-id --scopes developer-portal:manage
 ```
 
-Complete Google sign-in and portal consent, wait for the command to succeed,
-then start a new Codex session. If you also want account and benefit tools,
-request both scopes with `--scopes world-id:read,developer-portal:manage`;
-that also requires sandbox World ID sign-in.
+Use `world-id-sandbox` for sandbox. To also use account and benefit tools, request
+both scopes with `--scopes world-id:read,developer-portal:manage` and complete
+World ID sign-in as well.
 
-### Claude Code
-
-Ask to register or configure your app. Follow the portal tool's authorization
-challenge for `developer-portal:manage` and complete Google sign-in and consent.
-If authentication is needed, use `/mcp` to select and authenticate the sandbox
-World ID server. World ID-only authorization does not grant developer access.
-
-### Register or configure an app
+For **Claude Code**, ask to register or configure an app and follow the tool's
+Google sign-in and consent link. If needed, use `/mcp` to authenticate the
+matching World ID server. Account-only authorization does not grant developer
+access.
 
 ```text
-Register my sandbox app with World ID. My callback URL is https://my-app.example/auth/world/callback.
-Update my sandbox app's logo and callback URLs.
+Register my app with World ID. My callback URL is https://my-app.example/auth/world/callback.
+Update my app's logo and callback URLs.
 ```
 
-Use your actual HTTPS callback URL; sandbox does not accept HTTP localhost
-callbacks. The agent gathers the remaining details and prepares registration.
-Open its returned portal link to review and approve the request within 20
-minutes. Save any generated client secret directly in your backend's secure
-configuration; never paste it into chat. The agent checks completion and returns
-your client ID and public configuration.
+Use an HTTPS callback URL; HTTP localhost and wildcard callbacks are not
+accepted. Review and approve registration through the returned portal link
+within 20 minutes. Save any client secret directly in your backend's secure
+configuration, never in chat.
 
-Registration does not publish a benefit listing. For that, open the app's
-**Catalog** tab in the portal, save a listing, and submit it for review as the
-app owner. An authorized reviewer outside the app's team must approve it before
-it is published. Catalog submission is not currently exposed through MCP.
+To publish a benefit, open the app's **Catalog** tab in the portal and submit a
+listing for review. Registration does not publish a listing automatically.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development on `dev`, testing a
-feature branch without a build, and publishing releases.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development, testing and releases.

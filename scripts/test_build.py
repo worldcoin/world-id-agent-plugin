@@ -39,6 +39,7 @@ class BuildTests(unittest.TestCase):
             package = {path: files[path] for path in before}
             build.validate_package(package, configs[environment], configs[other])
             self.assertEqual(files[Path('assets/world-id.png')], before[Path('assets/world-id.png')])
+            self.assertEqual(files[Path('README.md')], before[Path('README.md')])
             metadata = json.loads(files[Path('release.json')])
             self.assertEqual(metadata['source_commit'], 'a' * 40)
             self.assertEqual(metadata['environment'], environment)
@@ -51,7 +52,9 @@ class BuildTests(unittest.TestCase):
         self.assertIn('--ref main', readme)
         self.assertIn('.git#main', readme)
         self.assertIn('world-id@world-id', readme)
-        self.assertNotIn('sandbox', readme)
+        self.assertIn('--ref sandbox', readme)
+        self.assertIn('.git#sandbox', readme)
+        self.assertIn('world-id-sandbox@world-id-demo', readme)
         signin = production[Path('skills/world-id-sign-in/SKILL.md')].decode()
         self.assertIn('auth.worldcoin.dev', signin)
         developer = production[Path('skills/world-id-developer/SKILL.md')].decode()
