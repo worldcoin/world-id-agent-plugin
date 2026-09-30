@@ -27,17 +27,29 @@ jobs:
     steps:
       - name: Check release credentials
         env:
-          RELEASE_TOKEN: ${{ secrets.PLUGIN_RELEASE_TOKEN }}
+          APP_CLIENT_ID: ${{ vars.PLUGIN_RELEASE_APP_CLIENT_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.PLUGIN_RELEASE_APP_PRIVATE_KEY }}
         run: |
-          if [[ -z "$RELEASE_TOKEN" ]]; then
-            echo 'Configure the repository secret PLUGIN_RELEASE_TOKEN before releasing' >&2
+          if [[ -z "$APP_CLIENT_ID" || -z "$APP_PRIVATE_KEY" ]]; then
+            echo 'Configure repository variable PLUGIN_RELEASE_APP_CLIENT_ID and secret PLUGIN_RELEASE_APP_PRIVATE_KEY before releasing' >&2
             exit 1
           fi
+      - name: Create release app token
+        id: release-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.PLUGIN_RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PLUGIN_RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: dev
           fetch-depth: 0
-          token: ${{ secrets.PLUGIN_RELEASE_TOKEN }}
+          token: ${{ steps.release-token.outputs.token }}
       - name: Select reviewed source commit
         id: source
         env:
@@ -66,7 +78,7 @@ jobs:
           printf 'Release version: `%s`\n' "$RELEASE_VERSION" >> "$GITHUB_STEP_SUMMARY"
       - name: Open protected-branch release PRs
         env:
-          GH_TOKEN: ${{ secrets.PLUGIN_RELEASE_TOKEN }}
+          GH_TOKEN: ${{ steps.release-token.outputs.token }}
           GH_PROMPT_DISABLED: '1'
           GH_REPO: ${{ github.repository }}
           SOURCE_SHA: ${{ steps.source.outputs.sha }}
