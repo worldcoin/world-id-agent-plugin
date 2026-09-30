@@ -56,16 +56,16 @@ class BuildTests(unittest.TestCase):
         self.assertIn('.git#sandbox', readme)
         self.assertIn('world-id-sandbox@world-id-demo', readme)
         signin = production[Path('skills/world-id-sign-in/SKILL.md')].decode()
-        self.assertIn('auth.worldcoin.dev', signin)
+        self.assertIn('auth.world.org', signin)
         developer = production[Path('skills/world-id-developer/SKILL.md')].decode()
-        self.assertIn('https://auth.worldcoin.dev/portal/clients/{clientId}', developer)
+        self.assertIn('https://auth.world.org/portal/clients/{clientId}', developer)
         self.assertIn('codex mcp login world-id ', developer)
 
     def test_render_matches_longest_value_once(self):
         configs = build.load_environments(self.root)
         render = build.replacements(configs['sandbox'], configs['production'])
         self.assertEqual(render('world-id-sandbox https://sandbox.auth.world.org/mcp sandbox'),
-                         'world-id https://auth.worldcoin.dev/mcp production')
+                         'world-id https://auth.world.org/mcp production')
 
     def test_release_version_updates_all_manifests_without_changing_source(self):
         before = build.package_files(self.root)
@@ -101,12 +101,25 @@ class BuildTests(unittest.TestCase):
     def test_mixed_hosts_and_placeholders_fail(self):
         path = self.root / 'skills/world-id-account/SKILL.md'
         original = path.read_text()
-        path.write_text(original + '\nhttps://auth.worldcoin.dev/mcp\n')
+        path.write_text(original + '\nhttps://auth.world.org/mcp\n')
         with self.assertRaisesRegex(ValueError, 'other environment'):
             build.build_outputs(self.root)
         path.write_text(original + '\n{{missing}}\n')
         with self.assertRaisesRegex(ValueError, 'unresolved'):
             build.build_outputs(self.root)
+
+    def test_cross_environment_hosts_fail_in_both_packages(self):
+        configs = build.load_environments(self.root)
+        outputs = build.build_outputs(self.root)
+        path = Path('skills/world-id-account/SKILL.md')
+        for environment, files in outputs.items():
+            other = 'sandbox' if environment == 'production' else 'production'
+            for reference in (configs[other]['mcp_url'], configs[other]['issuer'].removeprefix('https://')):
+                with self.subTest(environment=environment, reference=reference):
+                    mixed = {key: files[key] for key in build.package_files(self.root)}
+                    mixed[path] += ('\n' + reference + '\n').encode()
+                    with self.assertRaisesRegex(ValueError, 'other environment'):
+                        build.validate_package(mixed, configs[environment], configs[other])
 
     def test_catalog_cannot_point_to_missing_generated_directory(self):
         path = self.root / '.agents/plugins/marketplace.json'
@@ -121,7 +134,7 @@ class BuildTests(unittest.TestCase):
             build.build_outputs(self.root, '--bad-ref')
         path = self.root / 'environments/production.json'
         config = build.read_json(path)
-        config['issuer'] = 'http://auth.worldcoin.dev'
+        config['issuer'] = 'http://auth.world.org'
         path.write_bytes(build.json_bytes(config))
         with self.assertRaisesRegex(ValueError, 'HTTPS'):
             build.build_outputs(self.root)
