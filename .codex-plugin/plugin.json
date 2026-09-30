@@ -1,6 +1,6 @@
 {
   "name": "world-id-sandbox",
-  "version": "0.1.0+build.20260923021338",
+  "version": "0.1.0+build.20260928171618",
   "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in.",
   "author": {
     "name": "Tools for Humanity"
@@ -10,7 +10,7 @@
   "interface": {
     "displayName": "World ID (Sandbox)",
     "shortDescription": "Use World ID and register apps in sandbox.",
-    "longDescription": "Connect your sandbox World ID, discover published benefits, and register or configure apps through the sandbox World ID MCP server. Developer tools use Google portal sign-in; registration requires human approval and secrets stay in the browser. Includes integration guidance and directions for submitting catalog listings in the portal. For hackathon testing, not production. An offer listing does not confirm eligibility or redemption.",
+    "longDescription": "Connect your sandbox World ID, discover published benefits, and register or configure apps through the sandbox World ID MCP server. Developer tools use Google portal sign-in; registration requires human approval and secrets stay in the browser. Includes integration guidance and directions for submitting catalog listings in the portal. For testing with sandbox accounts and data. An offer listing does not confirm eligibility or redemption.",
     "developerName": "Tools for Humanity",
     "category": "Productivity",
     "capabilities": [

@@ -8,7 +8,7 @@
       "name": "world-id-sandbox",
       "source": {
         "source": "local",
-        "path": "./plugins/world-id-sandbox"
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",

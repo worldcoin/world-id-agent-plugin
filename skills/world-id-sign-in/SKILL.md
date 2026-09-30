@@ -5,8 +5,8 @@ description: Use when a browser displays the sandbox World ID proof sign-in page
 
 # World ID sign-in
 
-This plugin is sandbox-only. Preserve approval links exactly as provided; do not
-rewrite them to staging or production hosts.
+This plugin uses sandbox. Preserve approval links exactly as provided;
+never rewrite them to another environment's host.
 
 If the page redirects you back to the app, continue.
 Otherwise, copy the page's **Approval link** and send it to your human for approval.

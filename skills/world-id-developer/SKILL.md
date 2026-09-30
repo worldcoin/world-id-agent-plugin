@@ -8,7 +8,7 @@ description: Register a sandbox app with World ID or configure its OIDC client, 
 Use this plugin's MCP connection at `https://sandbox.auth.world.org/mcp`.
 Perform registration and configuration through its tools. Browser control is
 not required: the developer signs in and approves credential requests themselves.
-Keep all operations in sandbox; do not switch to staging or production.
+Keep all operations in sandbox; never switch environments.
 
 ## Connect the developer account
 
@@ -42,7 +42,7 @@ ask for tokens in chat.
    supports it; also supported are `client_secret_post` and `private_key_jwt`.
 3. Check the registration details:
 
-   - Sandbox callbacks must be HTTPS and match exactly; HTTP localhost and
+   - Registered callbacks must be HTTPS and match exactly; HTTP localhost and
      wildcard callbacks are not accepted. A device-only client still needs a
      registered redirect URI.
    - A logo is an optional public HTTPS PNG or JPEG, at most 512×512 pixels and

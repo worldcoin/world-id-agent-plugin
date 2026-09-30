@@ -1,0 +1,12 @@
+{
+  "name": "world-id-sandbox",
+  "environment": "sandbox",
+  "display_name": "World ID (Sandbox)",
+  "mcp_url": "https://sandbox.auth.world.org/mcp",
+  "issuer": "https://sandbox.auth.world.org",
+  "portal_url": "https://sandbox.auth.world.org/portal",
+  "notice": "For testing with sandbox accounts and data.",
+  "branch": "sandbox",
+  "catalog_name": "world-id-demo",
+  "catalog_display_name": "World ID Demo"
+}
