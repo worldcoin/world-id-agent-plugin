@@ -12,8 +12,8 @@ Create feature branches from `dev` and open PRs into `dev`. Edit the root plugin
 using the sandbox values in `environments/`. CI generates the release branches.
 
 Keep the name, version, description and author consistent across `plugin.json`,
-`.codex-plugin/plugin.json` and `.claude-plugin/plugin.json`. Changed plugin
-content needs a new version. Do not reuse a previously released version.
+`.codex-plugin/plugin.json` and `.claude-plugin/plugin.json`. You do not need to
+bump versions on `dev`; CI sets the release version in the generated packages.
 
 ## Testing
 
@@ -30,13 +30,15 @@ python3 scripts/build.py
 ```
 
 The build writes installable previews to `dist/sandbox/` and `dist/production/`.
+Add `--version 0.2.0` to preview a specific release version.
 
 ## Release
 
 1. Merge and test changes on `dev`.
-2. In GitHub Actions, run **Open release PRs** from `main` with the full
-   40-character `dev` commit SHA.
-3. CI tests the source. `scripts/build.py` generates both environments;
+2. In GitHub Actions, run **Open release PRs** from `main` and enter a new
+   version, such as `0.2.0`. Leave `source_sha` blank to use the latest `dev` commit.
+3. CI records the selected SHA in the run summary and tests that source.
+   `scripts/build.py` generates both environments with the requested version;
    `scripts/release.py` opens PRs into `sandbox` and `main`.
 4. Review, merge and test sandbox first. Test the production preview with
    production test accounts, then merge its PR.
@@ -44,7 +46,10 @@ The build writes installable previews to `dist/sandbox/` and `dist/production/`.
 CI does not merge PRs or push directly to protected branches. Merge releases in
 order and close superseded PRs.
 
-Retry failed runs with the same SHA; unchanged branches and open PRs are reused.
+Do not reuse a previously released version for changed content. To retry a
+release, enter the same version and the full SHA from its run summary in
+`source_sha`. Leaving it blank selects `dev` again, which may have advanced.
+Unchanged branches and open PRs are reused.
 Inspect and reopen closed release PRs before retrying. To undo a release, revert
 on `dev` and publish a new version.
 

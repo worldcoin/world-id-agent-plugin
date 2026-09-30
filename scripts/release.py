@@ -26,11 +26,11 @@ def git(repo, *args):
 
 def prepare_branch(repo, package, environment, source_sha):
     base = "main" if environment == "production" else "sandbox"
-    branch = f"release/{environment}/{source_sha}"
     config = build.load_environments(repo)
     files = build.package_files(package)
     version = build.validate_package(files, config[environment], config[
         "sandbox" if environment == "production" else "production"])
+    branch = f"release/{environment}/{version}-{source_sha}"
     metadata = build.read_json(package / "release.json")
     if metadata != {"environment": environment, "version": version, "source_commit": source_sha}:
         raise ValueError(f"{environment}: release metadata does not match the requested source")

@@ -3,9 +3,13 @@ name: Open release PRs
 on:
   workflow_dispatch:
     inputs:
-      source_sha:
-        description: Full commit SHA on dev to release to sandbox and main
+      version:
+        description: New plugin version (for example, 0.2.0)
         required: true
+        type: string
+      source_sha:
+        description: Optional full dev commit SHA; leave blank for the latest dev commit
+        required: false
         type: string
 
 permissions:
@@ -26,7 +30,7 @@ jobs:
           RELEASE_TOKEN: ${{ secrets.PLUGIN_RELEASE_TOKEN }}
         run: |
           if [[ -z "$RELEASE_TOKEN" ]]; then
-            echo 'Configure PLUGIN_RELEASE_TOKEN as described in CONTRIBUTING.md' >&2
+            echo 'Configure the repository secret PLUGIN_RELEASE_TOKEN before releasing' >&2
             exit 1
           fi
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -35,29 +39,35 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PLUGIN_RELEASE_TOKEN }}
       - name: Select reviewed source commit
+        id: source
         env:
-          SOURCE_SHA: ${{ inputs.source_sha }}
+          REQUESTED_SHA: ${{ inputs.source_sha }}
         run: |
+          SOURCE_SHA="${REQUESTED_SHA:-$(git rev-parse HEAD)}"
           if [[ ! "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
             echo 'source_sha must be a full lowercase commit SHA' >&2
             exit 1
           fi
           git merge-base --is-ancestor "$SOURCE_SHA" origin/dev
           git checkout --detach "$SOURCE_SHA"
+          echo "sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "Source commit: \`$SOURCE_SHA\`" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: '3.12'
       - name: Validate and build both releases
         env:
-          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
+          RELEASE_VERSION: ${{ inputs.version }}
         run: |
           python3 scripts/build.py --validate
           python3 -m unittest discover -s scripts -p 'test_*.py'
-          python3 scripts/build.py --source-sha "$SOURCE_SHA"
+          python3 scripts/build.py --source-sha "$SOURCE_SHA" --version "$RELEASE_VERSION"
+          printf 'Release version: `%s`\n' "$RELEASE_VERSION" >> "$GITHUB_STEP_SUMMARY"
       - name: Open protected-branch release PRs
         env:
           GH_TOKEN: ${{ secrets.PLUGIN_RELEASE_TOKEN }}
           GH_PROMPT_DISABLED: '1'
           GH_REPO: ${{ github.repository }}
-          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
         run: python3 scripts/release.py --source-sha "$SOURCE_SHA" --repository "$GH_REPO"

@@ -67,6 +67,26 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(render('world-id-sandbox https://sandbox.auth.world.org/mcp sandbox'),
                          'world-id https://auth.worldcoin.dev/mcp production')
 
+    def test_release_version_updates_all_manifests_without_changing_source(self):
+        before = build.package_files(self.root)
+        for version in ('0.2.0', '0.2.0-sandbox.1+build.123'):
+            with self.subTest(version=version):
+                outputs = build.build_outputs(self.root, 'a' * 40, version)
+                for files in outputs.values():
+                    for filename in build.MANIFESTS:
+                        self.assertEqual(json.loads(files[Path(filename)])['version'], version)
+                    metadata = json.loads(files[Path('release.json')])
+                    self.assertEqual(metadata['version'], version)
+                    self.assertEqual(metadata['source_commit'], 'a' * 40)
+                self.assertEqual(build.package_files(self.root), before)
+
+    def test_invalid_release_versions_fail(self):
+        for version in ('', 'latest', 'v0.2.0', '01.2.0', '0.2.0-01', '0.2.0+bad..build',
+                        '0.2.0\n', '0.2.0/other'):
+            with self.subTest(version=version):
+                with self.assertRaisesRegex(ValueError, 'semantic version'):
+                    build.build_outputs(self.root, 'a' * 40, version)
+
     def test_missing_and_mismatched_manifests_fail(self):
         path = self.root / '.claude-plugin/plugin.json'
         manifest = build.read_json(path)

@@ -40,8 +40,8 @@ class ReleaseTests(unittest.TestCase):
         release.git(self.repo, 'fetch', 'origin')
         self.write_packages()
 
-    def write_packages(self):
-        for environment, files in build.build_outputs(self.repo, self.sha).items():
+    def write_packages(self, version=None):
+        for environment, files in build.build_outputs(self.repo, self.sha, version).items():
             for path, data in files.items():
                 target = self.repo / 'dist' / environment / path
                 target.parent.mkdir(parents=True, exist_ok=True)
@@ -97,6 +97,23 @@ class ReleaseTests(unittest.TestCase):
             self.prepare()
         self.assertEqual(self.remote_sha(branch), self.sha)
 
+    def test_same_source_can_have_distinct_release_versions(self):
+        before = build.package_files(self.repo)
+        branches = {}
+        for version in ('0.2.0', '0.3.0+build.lock'):
+            self.write_packages(version)
+            for environment, base in (('sandbox', 'sandbox'), ('production', 'main')):
+                branch = self.prepare(environment)
+                self.assertEqual(branch, f'release/{environment}/{version}-{self.sha}')
+                branches[branch] = self.remote_sha(branch)
+                self.assertEqual(self.prepare(environment), branch)
+                self.merge_release(branch, base)
+                self.assertIsNone(self.prepare(environment))
+        self.assertEqual(len(branches), 4)
+        for branch, commit in branches.items():
+            self.assertEqual(self.remote_sha(branch), commit)
+        self.assertEqual(build.package_files(self.repo), before)
+
     def test_retry_recreates_matching_release_on_current_target(self):
         for environment, base in (('sandbox', 'sandbox'), ('production', 'main')):
             with self.subTest(environment=environment):
@@ -151,15 +168,7 @@ class ReleaseTests(unittest.TestCase):
         self.write_packages()
         with self.assertRaisesRegex(ValueError, 'new version'):
             self.prepare()
-        for filename in build.MANIFESTS:
-            path = self.repo / filename
-            data = build.read_json(path)
-            data['version'] = '0.2.0'
-            path.write_bytes(build.json_bytes(data))
-        release.git(self.repo, 'add', '.')
-        release.git(self.repo, 'commit', '-m', 'Bump version')
-        self.sha = release.git(self.repo, 'rev-parse', 'HEAD')
-        self.write_packages()
+        self.write_packages('0.2.0')
         self.assertIsNotNone(self.prepare())
 
     def test_historical_version_cannot_be_reused_after_another_release(self):
@@ -170,17 +179,12 @@ class ReleaseTests(unittest.TestCase):
 
         # Release A, then B, then attempt A again with different content.
         for version in ('0.2.0', original_version):
-            for filename in build.MANIFESTS:
-                path = self.repo / filename
-                manifest = build.read_json(path)
-                manifest['version'] = version
-                path.write_bytes(build.json_bytes(manifest))
             skill = self.repo / 'skills/world-id-account/SKILL.md'
             skill.write_text(skill.read_text() + '\nChanged account guidance.\n')
             release.git(self.repo, 'add', '.')
             release.git(self.repo, 'commit', '-m', f'Prepare {version}')
             self.sha = release.git(self.repo, 'rev-parse', 'HEAD')
-            self.write_packages()
+            self.write_packages(version)
             for environment, base in targets:
                 with self.subTest(environment=environment, version=version):
                     if version == '0.2.0':
@@ -192,7 +196,7 @@ class ReleaseTests(unittest.TestCase):
                         self.assertEqual(self.remote_sha(base), before)
                         self.assertEqual(release.git(
                             self.repo, 'ls-remote', '--heads', 'origin',
-                            f'refs/heads/release/{environment}/{self.sha}'), '')
+                            f'refs/heads/release/{environment}/{version}-{self.sha}'), '')
 
     def test_partial_pr_failure_is_visible_and_retry_reuses_open_pr(self):
         real_run = release.run

@@ -15,6 +15,10 @@ PLUGINS = {"sandbox": "world-id-sandbox", "production": "world-id"}
 MANIFESTS = ("plugin.json", ".codex-plugin/plugin.json", ".claude-plugin/plugin.json")
 PACKAGE_FILES = (*MANIFESTS, "mcp.json", ".mcp.json", "README.md",
                  ".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json")
+VERSION_PATTERN = (r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
+                   r"(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)"
+                   r"(?:\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?"
+                   r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?")
 
 
 def read_json(path):
@@ -72,7 +76,7 @@ def validate_package(files, config, other):
     identity = {key: manifests[0][key] for key in ("name", "version", "description", "author")}
     if identity["name"] != config["name"] or not isinstance(identity["version"], str):
         raise ValueError("Plugin identity does not match its environment")
-    if not re.fullmatch(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?", identity["version"]):
+    if not re.fullmatch(VERSION_PATTERN, identity["version"]):
         raise ValueError("Plugin version must be a semantic version")
     for manifest in manifests:
         if any(manifest[key] != value for key, value in identity.items()):
@@ -118,10 +122,10 @@ def replacements(source, target):
     return lambda text: pattern.sub(lambda match: values[match[0]], text)
 
 
-def build_outputs(root, source_sha=None):
+def build_outputs(root, source_sha=None, release_version=None):
     configs = load_environments(root)
     source_files = package_files(root)
-    version = validate_package(source_files, configs["sandbox"], configs["production"])
+    validate_package(source_files, configs["sandbox"], configs["production"])
     if source_sha is not None and not re.fullmatch(r"[0-9a-f]{40}", source_sha):
         raise ValueError("Source commit must be a full lowercase Git SHA")
     # Keep release automation on main so workflow_dispatch remains available there.
@@ -139,7 +143,13 @@ def build_outputs(root, source_sha=None):
                      if path != Path("README.md") and path.suffix in (".md", ".json") else data
                      for path, data in files.items()}
         other = configs["production" if environment == "sandbox" else "sandbox"]
-        validate_package(files, config, other)
+        if release_version is not None:
+            for filename in MANIFESTS:
+                path = Path(filename)
+                manifest = json.loads(files[path])
+                manifest["version"] = release_version
+                files[path] = json_bytes(manifest)
+        version = validate_package(files, config, other)
         files.update({path: (root / path).read_bytes() for path in support})
         files[Path("release.json")] = json_bytes({
             "environment": environment, "version": version, "source_commit": source_sha,
@@ -152,7 +162,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--validate", action="store_true", help="Validate this checkout without writing files")
     parser.add_argument("--source-sha", help="Record the source commit in release packages")
+    parser.add_argument("--version", help="Set the release version in generated packages only")
     args = parser.parse_args()
+    if args.validate and args.version is not None:
+        parser.error("--version cannot be used with --validate")
     try:
         if args.validate:
             configs = load_environments(ROOT)
@@ -162,7 +175,7 @@ def main():
             validate_package(package_files(ROOT), configs[environment], configs[other])
             print(f"Validated {environment} plugin.")
         else:
-            outputs = build_outputs(ROOT, args.source_sha)
+            outputs = build_outputs(ROOT, args.source_sha, args.version)
             for environment, files in outputs.items():
                 destination = ROOT / "dist" / environment
                 if destination.is_symlink():
