@@ -46,6 +46,11 @@ Add `--version 0.2.0` to preview a specific release version.
 CI does not merge PRs or push directly to protected branches. Merge releases in
 order and close superseded PRs.
 
+CI opens release PRs as the `world-id-plugin-releases` GitHub App, so the person
+running the workflow can review them. It uses repository variable
+`PLUGIN_RELEASE_APP_CLIENT_ID` and secret `PLUGIN_RELEASE_APP_PRIVATE_KEY` to
+create a temporary installation token.
+
 New releases must have higher [SemVer precedence](https://semver.org/#spec-item-11)
 than the current release on each target. Changing only `+build` metadata does
 not count as a version increase. Previously released versions cannot be reused.
