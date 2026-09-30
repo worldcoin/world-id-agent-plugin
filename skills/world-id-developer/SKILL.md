@@ -5,7 +5,7 @@ description: Register a production app with World ID or configure its OIDC clien
 
 # World ID developer
 
-Use this plugin's MCP connection at `https://auth.worldcoin.dev/mcp`.
+Use this plugin's MCP connection at `https://auth.world.org/mcp`.
 Perform registration and configuration through its tools. Browser control is
 not required: the developer signs in and approves credential requests themselves.
 Keep all operations in production; never switch environments.
@@ -70,7 +70,7 @@ ask for tokens in chat.
    confirms success; use `request.result.client` for the public client details.
    Report a terminal failure rather than silently starting another registration.
 
-Return the client ID, production issuer `https://auth.worldcoin.dev`, registered
+Return the client ID, production issuer `https://auth.world.org`, registered
 callbacks, and authentication method. Link to the client's portal page. If the
 developer also asks for implementation, use the `oidc` guide, or `federation` for
 an existing identity provider, and work within their app's existing auth setup.
@@ -87,7 +87,7 @@ immutable sector. Report a change only after the tool succeeds; reads may lag.
 
 App registration does not publish a benefit. The current MCP has no catalog
 submission tool. Direct the developer to
-`https://auth.worldcoin.dev/portal/clients/{clientId}?tab=catalog` using the
+`https://auth.world.org/portal/clients/{clientId}?tab=catalog` using the
 actual client ID: save the listing name, description, and app URL, then submit
 for review. Only the owner of an active app can submit. A separate authorized
 reviewer who is not an app member must approve it; approval publishes the listing.

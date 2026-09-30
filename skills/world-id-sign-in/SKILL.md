@@ -1,6 +1,6 @@
 ---
 name: world-id-sign-in
-description: Use when a browser displays the production World ID proof sign-in page with an Approval link at auth.worldcoin.dev. Does not handle Google developer-portal sign-in or OIDC client-registration approval.
+description: Use when a browser displays the production World ID proof sign-in page with an Approval link at auth.world.org. Does not handle Google developer-portal sign-in or OIDC client-registration approval.
 ---
 
 # World ID sign-in
