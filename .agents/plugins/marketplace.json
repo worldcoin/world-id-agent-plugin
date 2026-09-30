@@ -1,11 +1,11 @@
 {
-  "name": "world-id-demo",
+  "name": "world-id",
   "interface": {
-    "displayName": "World ID Demo"
+    "displayName": "World ID"
   },
   "plugins": [
     {
-      "name": "world-id-sandbox",
+      "name": "world-id",
       "source": {
         "source": "local",
         "path": "./"
