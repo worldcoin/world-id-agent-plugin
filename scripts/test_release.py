@@ -109,6 +109,38 @@ class ReleaseTests(unittest.TestCase):
         self.write_packages()
         self.assertIsNotNone(self.prepare())
 
+    def test_historical_version_cannot_be_reused_after_another_release(self):
+        original_version = build.read_json(self.repo / 'plugin.json')['version']
+        targets = (('sandbox', 'sandbox'), ('production', 'main'))
+        for environment, base in targets:
+            self.merge_release(self.prepare(environment), base)
+
+        # Release A, then B, then attempt A again with different content.
+        for version in ('0.2.0', original_version):
+            for filename in build.MANIFESTS:
+                path = self.repo / filename
+                manifest = build.read_json(path)
+                manifest['version'] = version
+                path.write_bytes(build.json_bytes(manifest))
+            skill = self.repo / 'skills/world-id-account/SKILL.md'
+            skill.write_text(skill.read_text() + '\nChanged account guidance.\n')
+            release.git(self.repo, 'add', '.')
+            release.git(self.repo, 'commit', '-m', f'Prepare {version}')
+            self.sha = release.git(self.repo, 'rev-parse', 'HEAD')
+            self.write_packages()
+            for environment, base in targets:
+                with self.subTest(environment=environment, version=version):
+                    if version == '0.2.0':
+                        self.merge_release(self.prepare(environment), base)
+                    else:
+                        before = self.remote_sha(base)
+                        with self.assertRaisesRegex(ValueError, 'previously released'):
+                            self.prepare(environment)
+                        self.assertEqual(self.remote_sha(base), before)
+                        self.assertEqual(release.git(
+                            self.repo, 'ls-remote', '--heads', 'origin',
+                            f'refs/heads/release/{environment}/{self.sha}'), '')
+
     def test_partial_pr_failure_is_visible_and_retry_reuses_open_pr(self):
         real_run = release.run
         created = set()

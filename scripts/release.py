@@ -47,6 +47,16 @@ def prepare_branch(repo, package, environment, source_sha):
                     raise ValueError(f"{base}: candidate must descend from the released source commit")
                 if previous["version"] == version and build.package_files(worktree) != files:
                     raise ValueError(f"{base}: changed plugin content requires a new version")
+                if previous["version"] != version:
+                    if git(repo, "rev-parse", "--is-shallow-repository") == "true":
+                        raise ValueError(f"{base}: full Git history is required to check released versions")
+                    # Follow the target branch's releases, excluding unmerged source/PR history.
+                    revisions = git(repo, "log", "--first-parent", "--format=%H",
+                                    f"origin/{base}", "--", "release.json").splitlines()
+                    for revision in revisions:
+                        past = json.loads(git(repo, "show", f"{revision}:release.json"))
+                        if past["version"] == version:
+                            raise ValueError(f"{base}: version {version} was previously released; choose a new version")
             git(worktree, "rm", "-r", "--ignore-unmatch", "--", ".")
             shutil.copytree(package, worktree, dirs_exist_ok=True)
             git(worktree, "add", "--all")
