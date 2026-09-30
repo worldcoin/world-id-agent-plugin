@@ -58,6 +58,15 @@ class ReleaseTests(unittest.TestCase):
         release.git(self.repo, 'push', 'origin', f'FETCH_HEAD:refs/heads/{base}')
         release.git(self.repo, 'fetch', 'origin')
 
+    def advance_target(self, base):
+        release.git(self.repo, 'checkout', '--detach', f'origin/{base}')
+        (self.repo / 'target-only.txt').write_text('Added after the release PR opened')
+        release.git(self.repo, 'add', 'target-only.txt')
+        release.git(self.repo, 'commit', '-m', 'Advance release target')
+        release.git(self.repo, 'push', 'origin', f'HEAD:refs/heads/{base}')
+        release.git(self.repo, 'fetch', 'origin')
+        release.git(self.repo, 'checkout', 'dev')
+
     def test_release_branches_are_complete_and_targets_stay_unchanged(self):
         for environment in ('sandbox', 'production'):
             branch = self.prepare(environment)
@@ -87,6 +96,50 @@ class ReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'refusing to overwrite'):
             self.prepare()
         self.assertEqual(self.remote_sha(branch), self.sha)
+
+    def test_retry_recreates_matching_release_on_current_target(self):
+        for environment, base in (('sandbox', 'sandbox'), ('production', 'main')):
+            with self.subTest(environment=environment):
+                branch = self.prepare(environment)
+                first = self.remote_sha(branch)
+                expected_tree = release.git(self.repo, 'rev-parse', f'{first}^{{tree}}')
+                self.advance_target(base)
+                target = self.remote_sha(base)
+
+                self.assertEqual(self.prepare(environment), branch)
+                updated = self.remote_sha(branch)
+                self.assertNotEqual(updated, first)
+                self.assertEqual(release.git(self.repo, 'rev-parse', f'{updated}^'), target)
+                self.assertEqual(release.git(self.repo, 'rev-parse', f'{updated}^{{tree}}'), expected_tree)
+                self.assertEqual(self.remote_sha(base), target)
+                self.assertEqual(self.prepare(environment), branch)
+                self.assertEqual(self.remote_sha(branch), updated)
+
+                self.merge_release(branch, base)
+                names = release.git(self.repo, 'ls-tree', '-r', '--name-only', f'origin/{base}').splitlines()
+                self.assertNotIn('target-only.txt', names)
+                self.assertIsNone(self.prepare(environment))
+
+    def test_retry_preserves_concurrent_release_branch_update(self):
+        branch = self.prepare()
+        first = self.remote_sha(branch)
+        self.advance_target('main')
+        target = self.remote_sha('main')
+        concurrent = release.git(self.repo, 'commit-tree', f'{first}^{{tree}}', '-p', first,
+                                 '-m', 'Concurrent release branch update')
+        release.git(self.repo, 'push', 'origin', f'{concurrent}:refs/heads/concurrent-update')
+        real_run = release.run
+
+        def update_before_push(*args, cwd, check=True):
+            if args[:2] == ('git', 'push'):
+                real_run('git', 'update-ref', f'refs/heads/{branch}', concurrent, cwd=self.remote)
+            return real_run(*args, cwd=cwd, check=check)
+
+        with mock.patch.object(release, 'run', side_effect=update_before_push):
+            with self.assertRaisesRegex(RuntimeError, 'git push failed'):
+                self.prepare()
+        self.assertEqual(self.remote_sha(branch), concurrent)
+        self.assertEqual(self.remote_sha('main'), target)
 
     def test_changed_package_requires_version_bump(self):
         self.merge_release(self.prepare())

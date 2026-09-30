@@ -64,15 +64,24 @@ def prepare_branch(repo, package, environment, source_sha):
             if tree == git(worktree, "rev-parse", "HEAD^{tree}"):
                 return None
             existing = git(repo, "ls-remote", "--heads", "origin", f"refs/heads/{branch}")
+            expected_head = ""
             if existing:
                 git(repo, "fetch", "origin", f"refs/heads/{branch}")
-                if git(repo, "rev-parse", "FETCH_HEAD^{tree}") != tree:
+                expected_head = git(repo, "rev-parse", "FETCH_HEAD")
+                if git(repo, "rev-parse", f"{expected_head}^{{tree}}") != tree:
                     raise ValueError(f"{branch}: existing release branch differs; refusing to overwrite it")
-            else:
-                git(worktree, "-c", "user.name=github-actions[bot]", "-c",
-                    "user.email=41898282+github-actions[bot]@users.noreply.github.com",
-                    "commit", "-m", f"Release {environment} {version} from {source_sha}")
-                git(worktree, "push", "origin", f"HEAD:refs/heads/{branch}")
+                ancestor = run("git", "merge-base", "--is-ancestor", "HEAD", expected_head,
+                               cwd=worktree, check=False)
+                if ancestor.returncode == 0:
+                    return branch
+                if ancestor.returncode != 1:
+                    raise RuntimeError(f"{branch}: ancestry check failed: {ancestor.stderr.strip()}")
+            # Recreate the full snapshot on the current target, including new deletions.
+            git(worktree, "-c", "user.name=github-actions[bot]", "-c",
+                "user.email=41898282+github-actions[bot]@users.noreply.github.com",
+                "commit", "-m", f"Release {environment} {version} from {source_sha}")
+            git(worktree, "push", "origin", f"--force-with-lease=refs/heads/{branch}:{expected_head}",
+                f"HEAD:refs/heads/{branch}")
         finally:
             git(repo, "worktree", "remove", "--force", str(worktree))
     return branch
