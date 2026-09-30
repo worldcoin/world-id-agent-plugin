@@ -46,8 +46,10 @@ Add `--version 0.2.0` to preview a specific release version.
 CI does not merge PRs or push directly to protected branches. Merge releases in
 order and close superseded PRs.
 
-Do not reuse a previously released version for changed content. To retry a
-release, enter the same version and the full SHA from its run summary in
+New releases must have higher [SemVer precedence](https://semver.org/#spec-item-11)
+than the current release on each target. Changing only `+build` metadata does
+not count as a version increase. Previously released versions cannot be reused.
+To retry a release, enter the same version and the full SHA from its run summary in
 `source_sha`. Leaving it blank selects `dev` again, which may have advanced.
 Unchanged branches and open PRs are reused.
 Inspect and reopen closed release PRs before retrying. To undo a release, revert

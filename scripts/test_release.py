@@ -13,6 +13,24 @@ import build
 import release
 
 
+class SemverTests(unittest.TestCase):
+    def test_precedence_orders_numeric_prerelease_and_stable_versions(self):
+        versions = ('1.0.0-1', '1.0.0-alpha', '1.0.0-alpha.1', '1.0.0-alpha.beta',
+                    '1.0.0-beta', '1.0.0-beta.2', '1.0.0-beta.11', '1.0.0-rc.1',
+                    '1.0.0', '1.0.1', '1.9.0', '1.10.0', '2.0.0')
+        for lower, higher in zip(versions, versions[1:]):
+            with self.subTest(lower=lower, higher=higher):
+                self.assertLess(release.semver_precedence(lower), release.semver_precedence(higher))
+
+    def test_build_metadata_does_not_change_precedence(self):
+        for version in ('1.0.0', '1.0.0-rc.1'):
+            with self.subTest(version=version):
+                self.assertEqual(release.semver_precedence(version),
+                                 release.semver_precedence(version + '+build.2'))
+                self.assertEqual(release.semver_precedence(version + '+build.2'),
+                                 release.semver_precedence(version + '+build.10'))
+
+
 class ReleaseTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -170,6 +188,31 @@ class ReleaseTests(unittest.TestCase):
             self.prepare()
         self.write_packages('0.2.0')
         self.assertIsNotNone(self.prepare())
+
+    def test_release_version_must_advance_semver_precedence(self):
+        targets = (('sandbox', 'sandbox'), ('production', 'main'))
+        self.write_packages('1.0.0')
+        for environment, base in targets:
+            self.merge_release(self.prepare(environment), base)
+
+        for version in ('0.9.0', '1.0.0-rc.1', '1.0.0+new-build'):
+            self.write_packages(version)
+            for environment, base in targets:
+                with self.subTest(environment=environment, version=version):
+                    before = self.remote_sha(base)
+                    with self.assertRaisesRegex(ValueError, 'must be greater than.*1.0.0'):
+                        self.prepare(environment)
+                    self.assertEqual(self.remote_sha(base), before)
+                    self.assertEqual(release.git(
+                        self.repo, 'ls-remote', '--heads', 'origin',
+                        f'refs/heads/release/{environment}/{version}-{self.sha}'), '')
+
+        for version in ('1.0.1-beta.2', '1.0.1-beta.11', '1.0.1'):
+            self.write_packages(version)
+            for environment, base in targets:
+                with self.subTest(environment=environment, version=version):
+                    self.merge_release(self.prepare(environment), base)
+                    self.assertIsNone(self.prepare(environment))
 
     def test_historical_version_cannot_be_reused_after_another_release(self):
         original_version = build.read_json(self.repo / 'plugin.json')['version']

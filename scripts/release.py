@@ -24,6 +24,17 @@ def git(repo, *args):
     return run("git", *args, cwd=repo).stdout.strip()
 
 
+def semver_precedence(version):
+    """Return a sortable SemVer key, ignoring build metadata."""
+    if not isinstance(version, str) or not re.fullmatch(build.VERSION_PATTERN, version):
+        raise ValueError("Release version must be a semantic version")
+    core, _, prerelease = version.split("+", 1)[0].partition("-")
+    identifiers = tuple((0, int(part)) if part.isdigit() else (1, part)
+                        for part in prerelease.split(".")) if prerelease else ()
+    # Numeric identifiers sort before text; stable releases sort after prereleases.
+    return tuple(map(int, core.split("."))), not prerelease, identifiers
+
+
 def prepare_branch(repo, package, environment, source_sha):
     base = "main" if environment == "production" else "sandbox"
     config = build.load_environments(repo)
@@ -57,6 +68,10 @@ def prepare_branch(repo, package, environment, source_sha):
                         past = json.loads(git(repo, "show", f"{revision}:release.json"))
                         if past["version"] == version:
                             raise ValueError(f"{base}: version {version} was previously released; choose a new version")
+                    if semver_precedence(version) <= semver_precedence(previous["version"]):
+                        raise ValueError(
+                            f"{base}: version {version} must be greater than the current release "
+                            f"{previous['version']} by SemVer precedence")
             git(worktree, "rm", "-r", "--ignore-unmatch", "--", ".")
             shutil.copytree(package, worktree, dirs_exist_ok=True)
             git(worktree, "add", "--all")
