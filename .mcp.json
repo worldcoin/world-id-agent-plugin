@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "world-id-sandbox": {
+    "world-id": {
       "type": "http",
-      "url": "https://sandbox.auth.world.org/mcp"
+      "url": "https://auth.worldcoin.dev/mcp"
     }
   }
 }
