@@ -106,7 +106,8 @@ account identifiers. Keep tokens and credentials out of chat.
 
 Benefit claims offer two routes: open the partner website yourself, or ask the
 agent to help in the browser. The agent uses the listing's optional redemption URL
-and instructions, falling back to the app URL and visible website flow. You may
+and instructions, falling back to the app URL and visible website flow. Both routes
+use one “Claim this benefit” destination. You may
 still need to complete sign-in or World ID approval. Partner plugin installation
 and MCP configuration are not required for this website flow. If browser tools
 are unavailable, the agent provides the link and steps for you to follow.

@@ -18,7 +18,9 @@ Do not substitute another environment's catalog if this catalog is empty.
 Reuse the selected listing from the conversation; fetch the catalog if it is missing.
 The catalog returns `name`, `description`, and `appUrl`, and may include
 `redemptionUrl` and `redemptionInstructions`. Start at `redemptionUrl` when supplied;
-otherwise use `appUrl`. Do not guess a claim URL.
+otherwise use `appUrl`. Present this one destination as “Claim this benefit”.
+Use the same destination for self-service and browser assistance; do not ask the
+user to choose between the website and redemption URLs. Do not guess a claim URL.
 
 Offer the user the choice to open the website and claim themselves, or have you
 help claim in the browser. If they already chose a route, including asking you to
