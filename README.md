@@ -104,6 +104,13 @@ What benefits are available?
 Account replies report connection status only; they do not expose personal
 account identifiers. Keep tokens and credentials out of chat.
 
+Benefit claims offer two routes: open the partner website yourself, or ask the
+agent to help in the browser. The agent uses the listing's optional redemption URL
+and instructions, falling back to the app URL and visible website flow. You may
+still need to complete sign-in or World ID approval. Partner plugin installation
+and MCP configuration are not required for this website flow. If browser tools
+are unavailable, the agent provides the link and steps for you to follow.
+
 ## Developer access
 
 App registration and configuration use Google developer-portal sign-in with the
@@ -136,7 +143,10 @@ within 20 minutes. Save any client secret directly in your backend's secure
 configuration, never in chat.
 
 To publish a benefit, open the app's **Catalog** tab in the portal and submit a
-listing for review. Registration does not publish a listing automatically.
+listing for review. Include an optional redemption URL and instructions describing
+prerequisites, website steps, and how to confirm the benefit was applied. These
+details become public only after approval. Registration does not publish a listing
+automatically.
 
 ## Contributing
 

@@ -88,7 +88,10 @@ immutable sector. Report a change only after the tool succeeds; reads may lag.
 App registration does not publish a benefit. The current MCP has no catalog
 submission tool. Direct the developer to
 `https://sandbox.auth.world.org/portal/clients/{clientId}?tab=catalog` using the
-actual client ID: save the listing name, description, and app URL, then submit
-for review. Only the owner of an active app can submit. A separate authorized
+actual client ID: save the listing name, description, and app URL. If available,
+include a `redemptionUrl` where claiming starts and `redemptionInstructions` with
+prerequisites, website steps, and a success indicator, then submit for review.
+These details become public after approval; do not include credentials or tokens.
+Only the owner of an active app can submit. A separate authorized
 reviewer who is not an app member must approve it; approval publishes the listing.
 Do not report a pending submission as approved or published.
