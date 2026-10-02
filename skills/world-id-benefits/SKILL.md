@@ -28,9 +28,17 @@ claim it for them, proceed with that route without asking again.
 
 - **Claim themselves:** provide the link and summarize relevant prerequisites and
   steps from the redemption instructions. Do not start browser automation.
-- **Browser assistance:** use the available browser/computer-use tools to open the
-  claim page and follow the partner's redemption instructions. If instructions are
-  absent, use the website's visible World ID claiming flow. If the instructions
+- **Browser assistance:** respect the user's explicit browser choice. Otherwise,
+  prefer a connected browser on their machine, such as Chrome, using their existing
+  profile so signed-in sessions can be reused. Check the available browser tools
+  before opening the claim page; opening a URL in the default browser alone does
+  not provide automation access. Keep partner sign-in and claiming in the same
+  browser and profile. If no host browser is available for automation, offer the
+  claim link for self-service or, when available, the built-in browser. Explain
+  that the built-in browser uses a separate session and may require another sign-in.
+  Let the user choose unless they already selected the built-in browser.
+  Follow the partner's redemption instructions in the selected browser. If
+  instructions are absent, use the website's visible World ID claiming flow. If the instructions
   conflict with the current page, check the visible flow rather than assuming a
   button or outcome exists. If no clear claim path is available, explain the blocker.
   If browser tools are unavailable, provide the link and steps for the user.
