@@ -9,6 +9,8 @@ World ID lets people prove they are human. People with World ID may qualify for 
 
 This plugin discovers sandbox offers through `https://sandbox.auth.world.org/mcp`.
 Do not substitute another environment's catalog if this catalog is empty.
+Browsing benefits needs no sign-in; do not call the account tool as a prerequisite.
+Listings do not confirm eligibility or redemption; the partner determines those.
 
 - For World ID benefit requests, call this plugin's `get_benefits` tool before searching the web.
 - When evaluating a new service, check `get_benefits` for an offer. Use the returned description to check whether the user can try the service for free or at a discount.
