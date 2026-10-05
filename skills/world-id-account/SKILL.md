@@ -21,7 +21,11 @@ if known). Share the command's authorization URL if the browser does not open.
 In Claude Code, use the matching server's authentication flow in `/mcp`.
 
 For a status check, or after successful authorization, call `get_world_id_account`
-with no arguments. Report connected only for an error-free response containing
+with no arguments. If the first check after successful Codex CLI login still
+requires authentication, the session may have stale credentials: ask the user to
+check again in a completely new Codex chat, then stop. Do not repeat login or
+report that authorization failed solely because this session remains unauthenticated.
+Report connected only for an error-free response containing
 `status: active` and `world_id_verified: true`; otherwise report not connected
 when both status fields are valid. If authorization is required,
 explain that sign-in is needed and offer to connect; continue if already requested.
