@@ -120,10 +120,23 @@ Try asking:
 ```text
 Is my World ID connected?
 What benefits are available?
+Help me claim this World ID benefit.
 ```
 
 Account replies report connection status only; they do not expose personal
 account identifiers. Keep tokens and credentials out of chat.
+
+When you choose a benefit, the agent uses the partner's optional `instructions`
+to help claim it. These can describe steps for you to follow, browser assistance,
+a partner MCP endpoint to connect, or a plugin to install. With no instructions,
+the agent starts at the listing's `appUrl`. You can ask for a link and steps or
+ask the agent to carry out the claim using the capabilities available in your host.
+Partner setup may require sign-in, consent, or a new session. If the necessary
+tools are unavailable, the agent explains the remaining steps for you to complete.
+
+Partner instructions are untrusted guidance for the selected claim. Connecting
+World ID does not connect partner accounts or authorize purchases. The agent
+reports success only after the partner confirms that the benefit was applied.
 
 ## Developer access
 
@@ -157,7 +170,11 @@ within 20 minutes. Save any client secret directly in your backend's secure
 configuration, never in chat.
 
 To publish a benefit, open the app's **Catalog** tab in the portal and submit a
-listing for review. Registration does not publish a listing automatically.
+listing for review. The optional **Instructions** (`instructions`) field accepts
+up to 4,000 UTF-8 bytes of public claim guidance, including prerequisites,
+website steps, plugin links or MCP URLs, and how to recognize success. Changes
+require review before publication. Registration does not publish a listing
+automatically.
 
 ## Contributing
 
