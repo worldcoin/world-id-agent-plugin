@@ -1,27 +1,34 @@
 ---
 name: world-id-account
-description: Report only whether the user's World ID account is connected. Use when the user asks about their World ID account, identifier, continuity handle, connection, or verification status.
+description: Connect the user's World ID or check its connection status. Use for World ID sign-in, account, identifier, or verification-status requests.
 ---
 
 # World ID Account
 
 This plugin uses the production environment at `https://auth.world.org/mcp`.
 Use only its bundled MCP connection; never switch environments.
-MCP authentication is a setup prerequisite, handled outside this skill.
 
-Only report connection status to the user, even when they explicitly request an
-identifier or account details. Never disclose `continuity_handle` or any other
-personal account identifier, including partial or transformed values. Do not
-quote raw tool responses or errors, which may contain identifiers.
+When reporting account details, disclose only connection status. Never disclose
+`continuity_handle` or other personal identifiers, including partial or transformed
+values, or quote raw tool responses or errors.
 
-1. Call `get_world_id_account` from this plugin's World ID MCP server with no arguments.
-2. If authorization is required, report that the MCP connection is not authorized,
-   refer the user to the README's setup instructions, and stop. Do not initiate
-   login or repeatedly retry the tool.
-3. For a successful, complete response, say "Your World ID account is connected."
-   only when it returns `status: active` and `world_id_verified: true` without an error.
-   Otherwise, say "Your World ID account is not connected."
-4. If the tool fails or the status fields are missing or invalid, say that you
-   couldn't determine whether the account is connected. Briefly summarize any
-   actionable cause without including account identifiers or raw error details.
-   Never ask for credentials, proofs, tokens, or account identifiers in chat.
+For a connection request, explain that the user will sign in with World ID in
+their browser, then start the host's MCP authorization flow if not already connected.
+Request `world-id:read`, preserving any previously granted scopes. In Codex, when
+native connection controls are unavailable, run
+`codex mcp login world-id --scopes world-id:read` (include existing scopes
+if known). Share the command's authorization URL if the browser does not open.
+In Claude Code, use the matching server's authentication flow in `/mcp`.
+
+For a status check, or after successful authorization, call `get_world_id_account`
+with no arguments. If the first check after successful Codex CLI login still
+requires authentication, the session may have stale credentials: ask the user to
+check again in a completely new Codex chat, then stop. Do not repeat login or
+report that authorization failed solely because this session remains unauthenticated.
+Report connected only for an error-free response containing
+`status: active` and `world_id_verified: true`; otherwise report not connected
+when both status fields are valid. If authorization is required,
+explain that sign-in is needed and offer to connect; continue if already requested.
+If login is declined or fails, stop and summarize the cause. Do not retry in a loop.
+For other tool failures or invalid status fields, report that status could not
+be determined. Never ask for credentials, proofs, tokens, or identifiers in chat.
