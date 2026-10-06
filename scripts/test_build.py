@@ -43,6 +43,8 @@ class BuildTests(unittest.TestCase):
             metadata = json.loads(files[Path('release.json')])
             self.assertEqual(metadata['source_commit'], 'a' * 40)
             self.assertEqual(metadata['environment'], environment)
+            catalog = json.loads(files[Path('.agents/plugins/marketplace.json')])
+            self.assertEqual(catalog['plugins'][0]['policy']['authentication'], 'ON_USE')
             self.assertEqual(files[Path('.github/workflows/release.yml')],
                              (self.root / '.github/workflows/release.yml').read_bytes())
         self.assertEqual(build.package_files(self.root), before)
