@@ -21,7 +21,7 @@ tool's scope challenge, preserving existing scopes. If the host cannot complete 
 
 - Codex users can run `codex mcp login world-id-sandbox --scopes developer-portal:manage`
   in their terminal, complete Google sign-in and consent, then start a new Codex
-  session. If they also use account/benefit tools, use
+  session. If they also connect their World ID account, use
   `--scopes world-id:read,developer-portal:manage` to authorize both flows.
 - Claude Code users can select the sandbox server in `/mcp` and authenticate
   for the requested developer-portal scope.

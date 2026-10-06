@@ -30,8 +30,15 @@ The release branches contain the complete plugin.
 
 Use the commands for the user's coding agent and requested environment below.
 Default to production on `main`. If the user supplies a `dev` or feature-branch
-URL, use that Git ref with the sandbox commands and plugin name. Follow the
-sign-in steps after installation and have the user complete browser authorization.
+URL, use that Git ref with the sandbox commands and plugin name.
+
+After installing, explain in chat: "World ID is installed. You can browse benefits
+without signing in. Would you like to connect your World ID?" If connection was
+already requested, continue directly to sign-in. Start the host's MCP authorization
+flow; in Codex, use the command below when native connection controls are unavailable.
+Let the user complete browser authorization, then check the account connection.
+For benefits-only requests, call `get_benefits` without an account check or login.
+Developer-only requests use [Developer access](#developer-access).
 
 ### Codex
 
@@ -69,11 +76,20 @@ claude plugin install world-id-sandbox@world-id-demo
 
 ## Sign in
 
-Account and benefit tools require World ID verification in the selected
-environment. Sandbox verification is separate from production. If you only need
-app registration, go to [Developer access](#developer-access).
+Browsing benefits requires no sign-in. Listings describe published offers;
+the partner determines eligibility and redemption.
 
-For **Codex**, exit any running session, then authorize the installed plugin:
+Connecting your account requires World ID verification in the selected
+environment. Sandbox verification is separate from production. Ask your agent:
+
+```text
+Connect my World ID.
+```
+
+Your agent can start sign-in and guide you through browser authorization.
+If you only need app registration, go to [Developer access](#developer-access).
+
+For **Codex**, your agent can run this command, or you can run it in a terminal:
 
 ```sh
 codex mcp login world-id --scopes world-id:read
@@ -91,8 +107,13 @@ For sandbox, use `plugin:world-id-sandbox:world-id-sandbox`. You can also run
 `/mcp` inside Claude Code, select the matching World ID server, and authenticate.
 
 Complete browser sign-in and wait for success. If the browser does not open,
-follow the URL printed by the command. Start a new Codex or Claude Code session
-after installation and sign-in. Each host manages its own authorization.
+follow the URL printed by the command. Resume the original request after sign-in.
+If the current session cannot see the installed tools or updated authorization,
+start a new session. Each host manages its own authorization.
+
+Codex may label an initial sign-in request "Reconnect" or "Authentication expired".
+That wording alone does not mean an existing connection broke. Complete the host's
+sign-in flow; if it fails, use the reported error to troubleshoot.
 
 Try asking:
 
@@ -129,7 +150,7 @@ For **Codex**, authorize developer access before starting a new session:
 codex mcp login world-id --scopes developer-portal:manage
 ```
 
-Use `world-id-sandbox` for sandbox. To also use account and benefit tools, request
+Use `world-id-sandbox` for sandbox. To also connect your World ID account, request
 both scopes with `--scopes world-id:read,developer-portal:manage` and complete
 World ID sign-in as well.
 

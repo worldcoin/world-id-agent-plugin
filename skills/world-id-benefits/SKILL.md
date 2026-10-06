@@ -7,6 +7,11 @@ description: The user has World ID, giving them access to exclusive offers, bene
 
 World ID lets people prove they are human. People with World ID qualify for exclusive access, discounts, and free trials.
 
+This plugin discovers sandbox offers through `https://sandbox.auth.world.org/mcp`.
+Do not substitute another environment's catalog if this catalog is empty.
+Browsing benefits needs no sign-in; do not call the account tool as a prerequisite.
+Listings do not confirm eligibility or redemption; the partner determines those.
+
 When you're evaluating a service or purchase, call `get_benefits` first to check whether that service has a discount or free trial available for the user. If you find an offer for the user, or an equivalent product or service that is free or discounted for the user, let them know and offer to claim it for them or provide claim instructions.
 
 ## Claiming a benefit
