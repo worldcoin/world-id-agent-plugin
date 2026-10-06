@@ -21,7 +21,7 @@ tool's scope challenge, preserving existing scopes. If the host cannot complete 
 
 - Codex users can run `codex mcp login world-id-sandbox --scopes developer-portal:manage`
   in their terminal, complete Google sign-in and consent, then start a new Codex
-  session. If they also use account/benefit tools, use
+  session. If they also connect their World ID account, use
   `--scopes world-id:read,developer-portal:manage` to authorize both flows.
 - Claude Code users can select the sandbox server in `/mcp` and authenticate
   for the requested developer-portal scope.
@@ -88,7 +88,13 @@ immutable sector. Report a change only after the tool succeeds; reads may lag.
 App registration does not publish a benefit. The current MCP has no catalog
 submission tool. Direct the developer to
 `https://sandbox.auth.world.org/portal/clients/{clientId}?tab=catalog` using the
-actual client ID: save the listing name, description, and app URL, then submit
-for review. Only the owner of an active app can submit. A separate authorized
+actual client ID: save the listing name, description, and **Website URL** (`appUrl`).
+Optionally add **Instructions** (`instructions`) describing how to claim the
+benefit: prerequisites, human or browser steps, a partner plugin name/link or
+MCP URL if needed, and how to confirm success. This is free-form text of at most
+4,000 UTF-8 bytes. These details become public after approval; do not include
+credentials or tokens. If omitted, agents start at the website URL.
+Submit the saved listing for review; changing instructions requires a new review.
+Only the owner of an active app can submit. A separate authorized
 reviewer who is not an app member must approve it; approval publishes the listing.
 Do not report a pending submission as approved or published.
