@@ -19,7 +19,7 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Set up World ID and verify my Proof of Human.",
+      "Use $world-id-setup to verify my Proof of Human and show sandbox benefits.",
       "Register my sandbox app with World ID.",
       "What sandbox benefits are available?"
     ],

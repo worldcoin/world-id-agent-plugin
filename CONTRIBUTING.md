@@ -37,7 +37,10 @@ codex plugin marketplace upgrade world-id-demo
 codex plugin add world-id-sandbox@world-id-demo
 ```
 
-Start a fresh chat to load the updated skills and MCP configuration. The sandbox
+Start a fresh chat to load the updated skills and MCP configuration. Invoke
+`$world-id-setup` explicitly when testing alongside the production plugin, and
+specify sandbox. An existing production connection is not sandbox verification.
+The sandbox
 marketplace follows the feature branch until you explicitly return it to `sandbox`:
 
 ```sh

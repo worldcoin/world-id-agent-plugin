@@ -80,7 +80,7 @@ claude plugin install world-id-sandbox@world-id-demo
 Run setup from the plugin installation UI, or ask:
 
 ```text
-Set up World ID and verify my Proof of Human.
+Use $world-id-setup to run setup and show my available benefits.
 ```
 
 Setup checks whether you are already verified, guides browser authorization when

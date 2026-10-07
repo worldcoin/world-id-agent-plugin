@@ -1,11 +1,17 @@
 ---
 name: world-id-setup
-description: Set up the World ID plugin with a dedicated Proof of Human verification step, then show available benefits. Use when the user runs plugin setup or asks to get started with World ID.
+description: Run the sandbox World ID plugin setup, verify Proof of Human, and show available benefits. Use when the user runs setup, invokes world-id-setup, or asks to get started with sandbox World ID.
 ---
 
 # Set up World ID
 
-Use the bundled sandbox World ID MCP at `https://sandbox.auth.world.org/mcp`.
+Use only this plugin's `world-id-sandbox` MCP connection at
+`https://sandbox.auth.world.org/mcp`, including for `get_world_id_account` and
+`get_benefits`. If production World ID is also installed, its connection and
+verification status do not satisfy this sandbox setup. Do not substitute another
+server with identically named tools. If this chat cannot access the matching
+connection, explain that setup needs the sandbox plugin tools in a fresh chat
+and stop before reporting verification status.
 Sandbox verification is separate from production. Honor an explicit request to
 browse benefits without signing in; setup is not a prerequisite for discovery.
 
