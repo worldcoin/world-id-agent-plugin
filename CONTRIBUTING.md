@@ -68,7 +68,11 @@ that sign-in alone is never reported as a successful claim.
 Plugin branches version skills and MCP configuration; they do not deploy the
 remote backend. A hub integration additionally needs an accessible test backend
 with the advertised tools and OAuth callbacks. Validate that endpoint separately
-before switching a preview package to it.
+before switching a preview package to it. The setup skill uses the public
+`start_world_id_setup` welcome and protected `complete_world_id_setup` reveal
+when the test backend advertises them. Without those tools, it uses a text
+welcome and the existing account/catalog tools. Installing a newer skill alone
+does not add the interactive UI or change the host's authentication callback.
 
 CI runs validation and tests. Optional local checks require Python 3.10 or newer:
 
