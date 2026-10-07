@@ -21,6 +21,52 @@ Ask Codex or Claude Code to install the repository from your feature branch.
 No build is needed. Start a new session and follow the [README](README.md) for
 sign-in. Specify branch `sandbox` to return to the released plugin.
 
+### Iterate before merge
+
+For a feature branch, install directly from its Git ref:
+
+```sh
+codex plugin marketplace add worldcoin/world-id-agent-plugin --ref codex/verification-first-onboarding
+codex plugin add world-id-sandbox@world-id-demo
+```
+
+After pushing changes to that branch, refresh the marketplace and reinstall:
+
+```sh
+codex plugin marketplace upgrade world-id-demo
+codex plugin add world-id-sandbox@world-id-demo
+```
+
+Start a fresh chat to load the updated skills and MCP configuration. The sandbox
+marketplace follows the feature branch until you explicitly return it to `sandbox`:
+
+```sh
+codex plugin marketplace add worldcoin/world-id-agent-plugin --ref sandbox
+codex plugin add world-id-sandbox@world-id-demo
+```
+
+For local iteration before pushing, add this checkout's absolute path as the
+marketplace source instead. Install through the desktop plugin directory and
+start a fresh chat. Local and branch marketplaces use the sandbox plugin identity;
+keep only the intended test source selected to avoid testing a stale package.
+
+Each feature-branch PR gets a CI artifact named `release-previews-<commit>` with
+both `sandbox/` and `production/` packages, including hidden manifest files.
+The production preview uses real accounts and data; generating it does not deploy
+or publish anything. Download the desired package and install it from a local
+marketplace to test the exact PR commit before merge.
+
+Test setup in a fresh chat and when installing during an existing chat. Cover an
+already verified user, successful verification, declined authorization, stale
+credentials, browsing without sign-in, and an empty or unavailable benefits
+catalog. Verify that partner consent starts only after selecting a partner and
+that sign-in alone is never reported as a successful claim.
+
+Plugin branches version skills and MCP configuration; they do not deploy the
+remote backend. A hub integration additionally needs an accessible test backend
+with the advertised tools and OAuth callbacks. Validate that endpoint separately
+before switching a preview package to it.
+
 CI runs validation and tests. Optional local checks require Python 3.10 or newer:
 
 ```sh

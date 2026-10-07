@@ -63,6 +63,27 @@ class BuildTests(unittest.TestCase):
         self.assertIn('https://auth.world.org/portal/clients/{clientId}', developer)
         self.assertIn('codex mcp login world-id ', developer)
 
+    def test_onboarding_is_packaged_in_both_environments(self):
+        outputs = build.build_outputs(self.root)
+        for environment, files in outputs.items():
+            with self.subTest(environment=environment):
+                for filename in build.MANIFESTS[:2]:
+                    manifest = json.loads(files[Path(filename)])
+                    skill = manifest['extensions']['com.openai']['onboardingSkill']
+                    self.assertIn(Path(skill), files)
+                    self.assertTrue(files[Path(skill)])
+
+    def test_invalid_onboarding_paths_fail(self):
+        for skill in ('./skills/missing/SKILL.md', '../skills/world-id-setup/SKILL.md',
+                      './skills/../README.md', 42):
+            with self.subTest(skill=skill):
+                path = self.root / 'plugin.json'
+                manifest = build.read_json(path)
+                manifest['extensions']['com.openai']['onboardingSkill'] = skill
+                path.write_bytes(build.json_bytes(manifest))
+                with self.assertRaisesRegex(ValueError, 'packaged skill'):
+                    build.build_outputs(self.root)
+
     def test_render_matches_longest_value_once(self):
         configs = build.load_environments(self.root)
         render = build.replacements(configs['sandbox'], configs['production'])

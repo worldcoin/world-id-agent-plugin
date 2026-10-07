@@ -81,6 +81,13 @@ def validate_package(files, config, other):
     for manifest in manifests:
         if any(manifest[key] != value for key, value in identity.items()):
             raise ValueError("Plugin manifests disagree on identity or version")
+    for manifest in manifests[:2]:
+        onboarding = manifest.get("extensions", {}).get("com.openai", {}).get("onboardingSkill")
+        if onboarding is not None:
+            if (not isinstance(onboarding, str) or not onboarding.startswith("./skills/")
+                    or ".." in Path(onboarding).parts or Path(onboarding).name != "SKILL.md"
+                    or Path(onboarding) not in files):
+                raise ValueError("Onboarding must reference a packaged skill under ./skills/")
     codex = manifests[1]
     if codex["skills"] != "./skills/" or codex["mcpServers"] != "./.mcp.json":
         raise ValueError("Codex manifest must reference the root skills and MCP configuration")

@@ -32,10 +32,11 @@ Use the commands for the user's coding agent and requested environment below.
 Default to production on `main`. If the user supplies a `dev` or feature-branch
 URL, use that Git ref with the sandbox commands and plugin name.
 
-After installing, explain in chat: "World ID is installed. You can browse benefits
-without signing in. Would you like to connect your World ID?" If connection was
-already requested, continue directly to sign-in. Start the host's MCP authorization
-flow; in Codex, use the command below when native connection controls are unavailable.
+After installing, offer the packaged World ID setup workflow: verify with Proof
+of Human, then explore benefits. Browsing remains available without sign-in.
+If setup or connection was already requested, continue directly to sign-in. Start
+the host's MCP authorization flow; in Codex, use the command below when native
+connection controls are unavailable.
 Let the user complete browser authorization, then check the account connection.
 For benefits-only requests, call `get_benefits` without an account check or login.
 Developer-only requests use [Developer access](#developer-access).
@@ -73,6 +74,18 @@ Sandbox:
 claude plugin marketplace add https://github.com/worldcoin/world-id-agent-plugin.git#sandbox
 claude plugin install world-id-sandbox@world-id-demo
 ```
+
+## Guided setup
+
+Run setup from the plugin installation UI, or ask:
+
+```text
+Set up World ID and verify my Proof of Human.
+```
+
+Setup checks whether you are already verified, guides browser authorization when
+needed, and returns to chat with available benefits after verification succeeds.
+Partner authorization happens only when you choose to use a partner.
 
 ## Sign in
 

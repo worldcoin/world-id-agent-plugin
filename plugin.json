@@ -5,5 +5,10 @@
   "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in.",
   "author": {
     "name": "Tools for Humanity"
+  },
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/world-id-setup/SKILL.md"
+    }
   }
 }

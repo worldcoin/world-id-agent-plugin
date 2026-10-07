@@ -19,12 +19,17 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Connect my sandbox World ID.",
+      "Set up World ID and verify my Proof of Human.",
       "Register my sandbox app with World ID.",
       "What sandbox benefits are available?"
     ],
     "brandColor": "#3155EE",
     "composerIcon": "./assets/world-id.png",
     "logo": "./assets/world-id.png"
+  },
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/world-id-setup/SKILL.md"
+    }
   }
 }
