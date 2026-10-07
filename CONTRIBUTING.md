@@ -69,10 +69,32 @@ Plugin branches version skills and MCP configuration; they do not deploy the
 remote backend. A hub integration additionally needs an accessible test backend
 with the advertised tools and OAuth callbacks. Validate that endpoint separately
 before switching a preview package to it. The setup skill uses the public
-`start_world_id_setup` welcome and protected `complete_world_id_setup` reveal
+`start_world_id_setup` welcome and protected `complete_world_id_setup` confirmation
 when the test backend advertises them. Without those tools, it uses a text
 welcome and the existing account/catalog tools. Installing a newer skill alone
-does not add the interactive UI or change the host's authentication callback.
+does not add the connection prompt or change the host's authentication callback.
+
+For a backend-team test deployment, request a public HTTPS MCP URL with working
+OAuth discovery and callbacks, and confirm the deployed backend commit. Use the
+test environment's identity flow and catalog; sandbox identities do not authorize
+production benefits. Check that `tools/list` advertises `start_world_id_setup`
+with a UI resource and `complete_world_id_setup` with OAuth and no UI resource.
+The public welcome must work without sign-in; completion must require a valid
+`world-id:read` token.
+
+Add the endpoint as a custom MCP in ChatGPT developer mode and create a private
+test plugin. Refresh the connection after backend updates and test in a fresh
+conversation with only the intended test plugin selected. A separate deployment
+URL must also be set in both MCP configuration files of the local preview package;
+keep the released plugin pointed at its normal endpoint.
+
+Test the whole conversation: get started, choose Connect World ID, complete the
+host's sign-in, return to the chat, and confirm that verification and real catalog
+suggestions appear in the conversation. No second setup card or typed `done`
+should be needed in a host that resumes automatically. Repeat with declined
+sign-in and with Explore benefits first. Record whether the host supports
+`ui/message`, resumes after OAuth, and owns any reconnect banner or callback page.
+Catalog approval and merging are not prerequisites for this private test.
 
 CI runs validation and tests. Optional local checks require Python 3.10 or newer:
 
