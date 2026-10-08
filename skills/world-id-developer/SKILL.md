@@ -10,6 +10,15 @@ Perform registration and configuration through its tools. Browser control is
 not required: the developer signs in and approves credential requests themselves.
 Keep all operations in sandbox; never switch environments.
 
+For any browser or computer-use steps, use the user's default system browser
+with their existing profile, the same browser used for plugin authorization,
+so existing signed-in sessions can be reused. Identify it from available system
+or browser information; if unclear, ask the user which browser they use.
+Do not use the built-in OpenAI browser. If the default browser cannot be
+controlled or access is declined, provide the link and steps for the user to
+complete there instead. The developer still completes Google sign-in and
+credential approvals themselves.
+
 ## Connect the developer account
 
 Call `get_portal_account` to check the connected developer identity. Portal tools
