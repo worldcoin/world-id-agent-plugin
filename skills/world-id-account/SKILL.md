@@ -14,10 +14,9 @@ values, or quote raw tool responses or errors.
 
 For a connection request, explain that the user will sign in with World ID in
 their browser, then start the host's MCP authorization flow if not already connected.
-Request `world-id:read`, preserving any previously granted scopes. In Codex, when
+Request only `world-id:read`. In Codex, when
 native connection controls are unavailable, run
-`codex mcp login world-id-sandbox --scopes world-id:read` (include existing scopes
-if known). Share the command's authorization URL if the browser does not open.
+`codex mcp login world-id-sandbox --scopes world-id:read`. Share the command's authorization URL if the browser does not open.
 In Claude Code, use the matching server's authentication flow in `/mcp`.
 
 For a status check, or after successful authorization, call `get_world_id_account`

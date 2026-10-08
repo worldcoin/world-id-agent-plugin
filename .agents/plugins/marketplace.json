@@ -15,6 +15,18 @@
         "authentication": "ON_USE"
       },
       "category": "Productivity"
+    },
+    {
+      "name": "world-id-developer-sandbox",
+      "source": {
+        "source": "local",
+        "path": "./plugins/world-id-developer"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
     }
   ]
 }

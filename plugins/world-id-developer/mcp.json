@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "world-id-developer-sandbox": {
+      "type": "streamable-http",
+      "url": "https://sandbox.auth.world.org/mcp/developer"
+    }
+  }
+}

@@ -59,9 +59,38 @@ class BuildTests(unittest.TestCase):
         self.assertIn('world-id-sandbox@world-id-demo', readme)
         signin = production[Path('skills/world-id-sign-in/SKILL.md')].decode()
         self.assertIn('auth.world.org', signin)
-        developer = production[Path('skills/world-id-developer/SKILL.md')].decode()
+        developer = production[Path('plugins/world-id-developer/skills/world-id-developer/SKILL.md')].decode()
         self.assertIn('https://auth.world.org/portal/clients/{clientId}', developer)
-        self.assertIn('codex mcp login world-id ', developer)
+        self.assertIn('codex mcp login world-id-developer ', developer)
+
+    def test_user_and_developer_plugins_are_separate_in_both_releases(self):
+        outputs = build.build_outputs(self.root)
+        for environment, user_name, developer_name, issuer in (
+            ('production', 'world-id', 'world-id-developer', 'https://auth.world.org'),
+            ('sandbox', 'world-id-sandbox', 'world-id-developer-sandbox', 'https://sandbox.auth.world.org'),
+        ):
+            with self.subTest(environment=environment):
+                files = outputs[environment]
+                catalog = json.loads(files[Path('.agents/plugins/marketplace.json')])
+                self.assertEqual([(entry['name'], entry['source']['path']) for entry in catalog['plugins']],
+                                 [(user_name, './'), (developer_name, './plugins/world-id-developer')])
+                self.assertEqual(json.loads(files[Path('.mcp.json')])['mcpServers'],
+                                 {user_name: {'type': 'http', 'url': issuer + '/mcp'}})
+                self.assertEqual(json.loads(files[Path('plugins/world-id-developer/.mcp.json')])['mcpServers'],
+                                 {developer_name: {'type': 'http', 'url': issuer + '/mcp/developer'}})
+                self.assertEqual(sorted(str(path) for path in files if path.name == 'SKILL.md'), [
+                    'plugins/world-id-developer/skills/world-id-developer/SKILL.md',
+                    'skills/world-id-account/SKILL.md', 'skills/world-id-benefits/SKILL.md',
+                    'skills/world-id-sign-in/SKILL.md',
+                ])
+
+    def test_cross_audience_mcp_connection_is_rejected(self):
+        path = self.root / 'plugins/world-id-developer/.mcp.json'
+        connection = build.read_json(path)
+        connection['mcpServers']['world-id-developer-sandbox']['url'] = 'https://sandbox.auth.world.org/mcp'
+        path.write_bytes(build.json_bytes(connection))
+        with self.assertRaisesRegex(ValueError, 'unexpected MCP connection'):
+            build.build_outputs(self.root)
 
     def test_render_matches_longest_value_once(self):
         configs = build.load_environments(self.root)
@@ -75,7 +104,7 @@ class BuildTests(unittest.TestCase):
             with self.subTest(version=version):
                 outputs = build.build_outputs(self.root, 'a' * 40, version)
                 for files in outputs.values():
-                    for filename in build.MANIFESTS:
+                    for filename in build.ALL_MANIFESTS:
                         self.assertEqual(json.loads(files[Path(filename)])['version'], version)
                     metadata = json.loads(files[Path('release.json')])
                     self.assertEqual(metadata['version'], version)

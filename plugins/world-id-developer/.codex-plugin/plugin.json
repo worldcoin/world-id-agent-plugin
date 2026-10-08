@@ -1,0 +1,30 @@
+{
+  "name": "world-id-developer-sandbox",
+  "version": "0.1.0+build.20260928171618",
+  "description": "Register and configure sandbox apps with World ID using developer guides and Google portal sign-in.",
+  "author": {
+    "name": "Tools for Humanity"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "World ID Developer (Sandbox)",
+    "shortDescription": "Build and manage World ID apps in sandbox.",
+    "longDescription": "Read integration guides and register or configure sandbox apps through the World ID developer MCP server. Developer tools use Google portal sign-in. Registration and credential changes require human approval; secrets stay in the browser.",
+    "developerName": "Tools for Humanity",
+    "category": "Productivity",
+    "capabilities": [
+      "OAuth",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Register my sandbox app with World ID.",
+      "Help me integrate World ID.",
+      "Update my app\u2019s callback URLs."
+    ],
+    "brandColor": "#3155EE",
+    "composerIcon": "./assets/world-id.png",
+    "logo": "./assets/world-id.png"
+  }
+}

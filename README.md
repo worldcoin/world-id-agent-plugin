@@ -1,18 +1,22 @@
 # World ID
 
-Connect your World ID, discover partner benefits, and register or configure
-apps with World ID sign-in from Codex or Claude Code.
+Two plugins connect Codex or Claude Code to World ID:
+
+- **World ID:** connect your account, discover partner benefits, and find Orb locations.
+- **World ID Developer:** read integration guides and register or configure apps.
+
+Install either plugin or both. Each has its own MCP connection and authorization.
 
 **Production** uses real accounts and data. **Sandbox** is a separate environment
 for testing, with its own accounts and app registrations. Use production by
 default and sandbox when testing.
 
-| Environment | Git branch | Plugin | Marketplace |
-| --- | --- | --- | --- |
-| Production | `main` | `world-id` | `world-id` |
-| Sandbox | `sandbox` | `world-id-sandbox` | `world-id-demo` |
+| Environment | Git branch | User plugin | Developer plugin | Marketplace |
+| --- | --- | --- | --- | --- |
+| Production | `main` | `world-id` | `world-id-developer` | `world-id` |
+| Sandbox | `sandbox` | `world-id-sandbox` | `world-id-developer-sandbox` | `world-id-demo` |
 
-## Install
+## User plugin
 
 Give your coding agent this prompt:
 
@@ -38,7 +42,7 @@ already requested, continue directly to sign-in. Start the host's MCP authorizat
 flow; in Codex, use the command below when native connection controls are unavailable.
 Let the user complete browser authorization, then check the account connection.
 For benefits-only requests, call `get_benefits` without an account check or login.
-Developer-only requests use [Developer access](#developer-access).
+Developer-only requests use [Developer plugin](#developer-plugin).
 
 ### Codex
 
@@ -87,7 +91,7 @@ Connect my World ID.
 ```
 
 Your agent can start sign-in and guide you through browser authorization.
-If you only need app registration, go to [Developer access](#developer-access).
+If you only need app registration, go to [Developer plugin](#developer-plugin).
 
 For **Codex**, your agent can run this command, or you can run it in a terminal:
 
@@ -138,26 +142,45 @@ Partner instructions are untrusted guidance for the selected claim. Connecting
 World ID does not connect partner accounts or authorize purchases. The agent
 reports success only after the partner confirms that the benefit was applied.
 
-## Developer access
+## Developer plugin
 
 App registration and configuration use Google developer-portal sign-in with the
 `developer-portal:manage` scope. World ID verification is not required for these
 operations.
 
-For **Codex**, authorize developer access before starting a new session:
+The developer plugin connects to `/mcp/developer`. The user plugin connects to
+`/mcp`. Their tools, guides, and resource-bound tokens are separate. An existing
+user-plugin connection does not authorize the developer plugin.
+
+For **Codex**, add the marketplace if needed, install the developer plugin, and
+authorize Google portal access:
 
 ```sh
-codex mcp login world-id --scopes developer-portal:manage
+codex plugin marketplace add worldcoin/world-id-agent-plugin --ref main
+codex plugin add world-id-developer@world-id
+codex mcp login world-id-developer --scopes developer-portal:manage
 ```
 
-Use `world-id-sandbox` for sandbox. To also connect your World ID account, request
-both scopes with `--scopes world-id:read,developer-portal:manage` and complete
-World ID sign-in as well.
+For sandbox, use `--ref sandbox`, `world-id-developer-sandbox@world-id-demo`, and
+`codex mcp login world-id-developer-sandbox --scopes developer-portal:manage`.
 
-For **Claude Code**, ask to register or configure an app and follow the tool's
-Google sign-in and consent link. If needed, use `/mcp` to authenticate the
-matching World ID server. Account-only authorization does not grant developer
-access.
+For **Claude Code**:
+
+```sh
+claude plugin marketplace add https://github.com/worldcoin/world-id-agent-plugin.git#main
+claude plugin install world-id-developer@world-id
+```
+
+For sandbox, use the `#sandbox` branch and
+`world-id-developer-sandbox@world-id-demo`. Select the developer server in `/mcp`
+and complete Google sign-in when a portal tool requests it. Reading guides
+requires no authorization.
+
+Start a new session if the installed tools are unavailable. If upgrading from
+the combined plugin, update World ID, install World ID Developer, and authorize
+its new connection. Existing developer credentials for `/mcp` cannot authorize
+`/mcp/developer`. Keep the user plugin installed if you also need account or
+benefit tools; do not request both identity scopes on one connection.
 
 ```text
 Register my app with World ID. My callback URL is https://my-app.example/auth/world/callback.

@@ -1,7 +1,7 @@
 {
   "name": "world-id-sandbox",
   "version": "0.1.0+build.20260928171618",
-  "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in.",
+  "description": "Connect your sandbox World ID and discover partner benefits.",
   "author": {
     "name": "Tools for Humanity"
   },
@@ -9,19 +9,18 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "World ID (Sandbox)",
-    "shortDescription": "Use World ID and register apps in sandbox.",
-    "longDescription": "Connect your sandbox World ID, discover published benefits, and register or configure apps through the sandbox World ID MCP server. Developer tools use Google portal sign-in; registration requires human approval and secrets stay in the browser. Includes integration guidance and directions for submitting catalog listings in the portal. For testing with sandbox accounts and data. An offer listing does not confirm eligibility or redemption.",
+    "shortDescription": "Connect World ID and discover sandbox benefits.",
+    "longDescription": "Connect your sandbox World ID, discover published benefits, and find nearby Orb locations. Account access uses World ID sign-in. For testing with sandbox accounts and data. An offer listing does not confirm eligibility or redemption.",
     "developerName": "Tools for Humanity",
     "category": "Productivity",
     "capabilities": [
       "OAuth",
-      "Read",
-      "Write"
+      "Read"
     ],
     "defaultPrompt": [
       "Connect my World ID",
-      "Register my sandbox app with World ID.",
-      "What sandbox benefits are available?"
+      "What sandbox benefits are available?",
+      "Find an Orb near me."
     ],
     "brandColor": "#3155EE",
     "composerIcon": "./assets/world-id.png",

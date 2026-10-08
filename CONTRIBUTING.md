@@ -8,11 +8,13 @@
 
 ## Development
 
-Create feature branches from `dev` and open PRs into `dev`. Edit the root plugin
-using the sandbox values in `environments/`. CI generates the release branches.
+Create feature branches from `dev` and open PRs into `dev`. Edit the root user
+plugin and `plugins/world-id-developer/` using the sandbox values in `environments/`.
+Keep their skills and MCP connections separate. CI generates the release branches.
 
 Keep the name, version, description and author consistent across `plugin.json`,
-`.codex-plugin/plugin.json` and `.claude-plugin/plugin.json`. You do not need to
+`.codex-plugin/plugin.json` and `.claude-plugin/plugin.json` within each plugin.
+Both plugins use the same release version. You do not need to
 bump versions on `dev`; CI sets the release version in the generated packages.
 
 ## Testing
@@ -30,11 +32,13 @@ python3 scripts/build.py
 ```
 
 The build writes installable previews to `dist/sandbox/` and `dist/production/`.
+Each environment's marketplace lists both plugins.
 Add `--version 0.2.0` to preview a specific release version.
 
 ## Release
 
-1. Merge and test changes on `dev`.
+1. Deploy the IdP API and CloudFront `/mcp/developer` route, then merge and test
+   the plugin changes on `dev`.
 2. In GitHub Actions, run **Open release PRs** from `main` and enter a new
    version, such as `0.2.0`. Leave `source_sha` blank to use the latest `dev` commit.
 3. CI records the selected SHA in the run summary and tests that source.
