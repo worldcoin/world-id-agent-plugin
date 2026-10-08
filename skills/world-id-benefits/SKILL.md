@@ -12,13 +12,11 @@ Do not substitute another environment's catalog if this catalog is empty.
 Browsing benefits needs no sign-in; do not call the account tool as a prerequisite.
 Listings do not confirm eligibility or redemption; the partner determines those.
 
-For any browser or computer-use steps, including partner sign-in and benefit
-claims, use the user's default system browser with their existing profile, the
-same browser used for plugin authorization, so existing signed-in sessions can
-be reused. Identify it from available system or browser information; if unclear,
-ask the user which browser they use. Do not use the built-in OpenAI browser.
-If the default browser cannot be controlled or access is declined, provide the
-link and claim instructions for the user to complete there instead.
+For browser tasks, open links in the user's default system browser and use
+computer use to continue in that browser's existing profile. Reuse any tab
+already opened by plugin authentication. Do not use the built-in OpenAI browser.
+If you cannot control the user's browser, provide the link and instructions for
+them to finish.
 
 When you're evaluating a service or purchase, call `get_benefits` first to check whether that service has a discount or free trial available for the user. If you find an offer for the user, or an equivalent product or service that is free or discounted for the user, let them know and offer to claim it for them or provide claim instructions.
 

@@ -8,13 +8,11 @@ description: Connect the user's World ID or check its connection status. Use for
 This plugin uses the sandbox environment at `https://sandbox.auth.world.org/mcp`.
 Use only its bundled MCP connection; never switch environments.
 
-For any browser or computer-use steps, use the user's default system browser
-with their existing profile, the same browser used for plugin authorization,
-so existing signed-in sessions can be reused. Identify it from available system
-or browser information; if unclear, ask the user which browser they use.
-Do not use the built-in OpenAI browser. If the default browser cannot be
-controlled or access is declined, provide the link and steps for the user to
-complete there instead.
+For browser tasks, open links in the user's default system browser and use
+computer use to continue in that browser's existing profile. Reuse any tab
+already opened by plugin authentication. Do not use the built-in OpenAI browser.
+If you cannot control the user's browser, provide the link and instructions for
+them to finish.
 
 When reporting account details, disclose only connection status. Never disclose
 `continuity_handle` or other personal identifiers, including partial or transformed
