@@ -45,6 +45,9 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(metadata['environment'], environment)
             catalog = json.loads(files[Path('.agents/plugins/marketplace.json')])
             self.assertEqual(catalog['plugins'][0]['policy']['authentication'], 'ON_USE')
+            mcp = json.loads(files[Path('mcp.json')])
+            server = mcp['mcpServers'][configs[environment]['name']]
+            self.assertEqual(server['extensions']['com.openai']['auth']['type'], 'mixed')
             self.assertEqual(files[Path('.github/workflows/release.yml')],
                              (self.root / '.github/workflows/release.yml').read_bytes())
         self.assertEqual(build.package_files(self.root), before)
@@ -62,6 +65,21 @@ class BuildTests(unittest.TestCase):
         developer = production[Path('skills/world-id-developer/SKILL.md')].decode()
         self.assertIn('https://auth.world.org/portal/clients/{clientId}', developer)
         self.assertIn('codex mcp login world-id ', developer)
+
+    def test_missing_or_incorrect_mixed_auth_fails(self):
+        path = self.root / 'mcp.json'
+        original = path.read_text()
+        for auth_type in (None, 'none', 'oauth'):
+            with self.subTest(auth_type=auth_type):
+                mcp = json.loads(original)
+                server = mcp['mcpServers']['world-id-sandbox']
+                if auth_type is None:
+                    del server['extensions']
+                else:
+                    server['extensions']['com.openai']['auth']['type'] = auth_type
+                path.write_bytes(build.json_bytes(mcp))
+                with self.assertRaisesRegex(ValueError, 'mcp.json: unexpected MCP connection'):
+                    build.build_outputs(self.root)
 
     def test_render_matches_longest_value_once(self):
         configs = build.load_environments(self.root)

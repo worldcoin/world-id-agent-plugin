@@ -89,6 +89,8 @@ def validate_package(files, config, other):
             raise ValueError(f"Codex {key} references a missing asset")
     for filename, transport in (("mcp.json", "streamable-http"), (".mcp.json", "http")):
         expected = {config["name"]: {"type": transport, "url": config["mcp_url"]}}
+        if filename == "mcp.json":
+            expected[config["name"]]["extensions"] = {"com.openai": {"auth": {"type": "mixed"}}}
         if json.loads(files[Path(filename)])["mcpServers"] != expected:
             raise ValueError(f"{filename}: unexpected MCP connection")
     for filename in (".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json"):
