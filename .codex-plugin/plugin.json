@@ -1,7 +1,7 @@
 {
   "name": "world-id",
-  "version": "0.1.3",
-  "description": "Connect your World ID to ChatGPT. This enables you to access discounts, services, and other features available only for unique humans.",
+  "version": "0.1.4",
+  "description": "Connect your production World ID, discover benefits, and register and configure apps with World ID sign-in.",
   "author": {
     "name": "Tools for Humanity"
   },
@@ -9,8 +9,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "World ID",
-    "shortDescription": "Verify as a human",
-    "longDescription": "Connect your World ID to ChatGPT. This enables you to access discounts, services, and other features available only for unique humans.",
+    "shortDescription": "Use World ID and register apps in production.",
+    "longDescription": "Connect your production World ID, discover published benefits, and register or configure apps through the production World ID MCP server. Developer tools use Google portal sign-in; registration requires human approval and secrets stay in the browser. Includes integration guidance and directions for submitting catalog listings in the portal. Uses production accounts and data. An offer listing does not confirm eligibility or redemption.",
     "developerName": "Tools for Humanity",
     "category": "Productivity",
     "capabilities": [
@@ -19,7 +19,7 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Connect my production World ID.",
+      "Connect my World ID",
       "Register my production app with World ID.",
       "What production benefits are available?"
     ],

@@ -1,7 +1,7 @@
 {
   "name": "world-id",
-  "version": "0.1.3",
-  "description": "Connect your World ID to ChatGPT. This enables you to access discounts, services, and other features available only for unique humans.",
+  "version": "0.1.4",
+  "description": "Connect your production World ID, discover benefits, and register and configure apps with World ID sign-in.",
   "author": {
     "name": "Tools for Humanity"
   }
