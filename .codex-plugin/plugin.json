@@ -19,9 +19,9 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Connect my World ID",
-      "Register my sandbox app with World ID.",
-      "What sandbox benefits are available?"
+      "What can I do with my World ID?",
+      "What discounts and services can I access?",
+      "What can I do as a unique human?"
     ],
     "brandColor": "#3155EE",
     "composerIcon": "./assets/world-id.png",
