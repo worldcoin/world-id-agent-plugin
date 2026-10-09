@@ -3,7 +3,14 @@
   "mcpServers": {
     "world-id-sandbox": {
       "type": "streamable-http",
-      "url": "https://sandbox.auth.world.org/mcp"
+      "url": "https://sandbox.auth.world.org/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "mixed"
+          }
+        }
+      }
     }
   }
 }
