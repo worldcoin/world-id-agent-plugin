@@ -8,12 +8,19 @@ description: Connect the user's World ID or check its connection status. Use for
 This plugin uses the sandbox environment at `https://sandbox.auth.world.org/mcp`.
 Use only its bundled MCP connection; never switch environments.
 
+For browser tasks, open links in the user's default system browser and use
+computer use to continue in that browser's existing profile. Reuse any tab
+already opened by plugin authentication. Do not use the built-in OpenAI browser.
+If you cannot control the user's browser, provide the link and instructions for
+them to finish.
+
 When reporting account details, disclose only connection status. Never disclose
 `continuity_handle` or other personal identifiers, including partial or transformed
 values, or quote raw tool responses or errors.
 
 For a connection request, explain that the user will sign in with World ID in
-their browser, then start the host's MCP authorization flow if not already connected.
+their default system browser, then start the host's MCP authorization flow if
+not already connected.
 Request `world-id:read`, preserving any previously granted scopes. In Codex, when
 native connection controls are unavailable, run
 `codex mcp login world-id-sandbox --scopes world-id:read` (include existing scopes
