@@ -1,7 +1,7 @@
 {
   "name": "world-id-sandbox",
   "version": "0.1.0+build.20260928171618",
-  "description": "Connect your sandbox World ID and discover partner benefits.",
+  "description": "Connect your World ID to ChatGPT. This enables you to access discounts, services, and other features available only for unique humans.",
   "author": {
     "name": "Tools for Humanity"
   },
@@ -9,8 +9,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "World ID (Sandbox)",
-    "shortDescription": "Connect World ID and discover sandbox benefits.",
-    "longDescription": "Connect your sandbox World ID, discover published benefits, and find nearby Orb locations. Account access uses World ID sign-in. For testing with sandbox accounts and data. An offer listing does not confirm eligibility or redemption.",
+    "shortDescription": "Verify as a human",
+    "longDescription": "Connect your World ID to ChatGPT. This enables you to access discounts, services, and other features available only for unique humans.",
     "developerName": "Tools for Humanity",
     "category": "Productivity",
     "capabilities": [
