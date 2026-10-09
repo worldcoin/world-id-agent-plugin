@@ -34,8 +34,9 @@ URL, use that Git ref with the sandbox commands and plugin name.
 
 After installing, explain in chat: "World ID is installed. You can browse benefits
 without signing in. Would you like to connect your World ID?" If connection was
-already requested, continue directly to sign-in. Start the host's MCP authorization
-flow; in Codex, use the command below when native connection controls are unavailable.
+already requested, continue directly to sign-in. Use the active host's MCP
+authorization flow as described below; desktop installations use native connection
+controls, while CLI login requires a server configured in that CLI environment.
 Let the user complete browser authorization, then check the account connection.
 For benefits-only requests, call `get_benefits` without an account check or login.
 Developer-only requests use [Developer access](#developer-access).
@@ -86,16 +87,27 @@ environment. Sandbox verification is separate from production. Ask your agent:
 Connect my World ID.
 ```
 
-Your agent can start sign-in and guide you through browser authorization.
+Your agent can guide you through the host's sign-in flow.
 If you only need app registration, go to [Developer access](#developer-access).
 
-For **Codex**, your agent can run this command, or you can run it in a terminal:
+For **ChatGPT/Codex desktop and workspace-directory installations**, choose
+**Connect** or **Reconnect** in the World ID plugin's connection settings or the
+reconnect banner. This opens browser sign-in for the connection used by your chat.
+If you cancelled sign-in during installation, you can use these controls later.
+The agent should point you to them when it cannot activate them directly.
+
+For a **Codex CLI session**, first check `codex mcp list` in the same execution
+environment. Only if it lists `world-id` at the endpoint in the installed plugin's
+`.mcp.json`, run:
 
 ```sh
 codex mcp login world-id --scopes world-id:read
 ```
 
-For sandbox, use `world-id-sandbox` in place of `world-id`.
+For sandbox, use `world-id-sandbox` and the sandbox plugin's bundled endpoint.
+If the CLI cannot find the server, use the host that installed the plugin to
+manage its connection. Desktop tools can be available even when the standalone
+CLI does not list their server; CLI login is not a fallback for that case.
 
 For **Claude Code**, authorize the installed plugin:
 
@@ -107,9 +119,11 @@ For sandbox, use `plugin:world-id-sandbox:world-id-sandbox`. You can also run
 `/mcp` inside Claude Code, select the matching World ID server, and authenticate.
 
 Complete browser sign-in and wait for success. If the browser does not open,
-follow the URL printed by the command. Resume the original request after sign-in.
-If the current session cannot see the installed tools or updated authorization,
-start a new session. Each host manages its own authorization.
+follow the URL printed by the CLI command, if using CLI login. Check the account
+connection again in the same chat and resume the original request after sign-in.
+If the current chat cannot see the tools or updated authorization, check the host's
+connection status and available refresh controls first. A new chat is a recovery
+option if that does not resolve it. Each host manages its own authorization.
 
 Codex may label an initial sign-in request "Reconnect" or "Authentication expired".
 That wording alone does not mean an existing connection broke. Complete the host's
@@ -144,7 +158,12 @@ App registration and configuration use Google developer-portal sign-in with the
 `developer-portal:manage` scope. World ID verification is not required for these
 operations.
 
-For **Codex**, authorize developer access before starting a new session:
+For **ChatGPT/Codex desktop and workspace-directory installations**, follow the
+developer tool's sign-in prompt through the native **Connect** or **Reconnect**
+control, then check developer access again in the same chat.
+
+For a **Codex CLI session**, use the server check described in [Sign in](#sign-in)
+before authorizing developer access:
 
 ```sh
 codex mcp login world-id --scopes developer-portal:manage
