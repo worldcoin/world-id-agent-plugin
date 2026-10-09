@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "world-id-sandbox",
-  "version": "0.1.3",
-  "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in.",
+  "version": "0.1.4",
+  "description": "Connect your World ID to ChatGPT. This enables you to access discounts, services, and other features available only for unique humans.",
   "author": {
     "name": "Tools for Humanity"
   }
