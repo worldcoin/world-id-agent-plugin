@@ -15,13 +15,12 @@
     "category": "Productivity",
     "capabilities": [
       "OAuth",
-      "Read",
-      "Write"
+      "Read"
     ],
     "defaultPrompt": [
       "Connect my World ID",
-      "Register my sandbox app with World ID.",
-      "What sandbox benefits are available?"
+      "What sandbox benefits are available?",
+      "Find an Orb near me."
     ],
     "brandColor": "#3155EE",
     "composerIcon": "./assets/world-id.png",

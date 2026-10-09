@@ -4,13 +4,18 @@
     "name": "Tools for Humanity"
   },
   "metadata": {
-    "description": "World ID plugin for sandbox."
+    "description": "World ID user and developer plugins for sandbox."
   },
   "plugins": [
     {
       "name": "world-id-sandbox",
       "source": "./",
-      "description": "Connect your sandbox World ID, discover benefits, and register and configure apps with World ID sign-in."
+      "description": "Connect your sandbox World ID and discover partner benefits."
+    },
+    {
+      "name": "world-id-developer-sandbox",
+      "source": "./plugins/world-id-developer",
+      "description": "Register and configure sandbox apps with World ID."
     }
   ]
 }

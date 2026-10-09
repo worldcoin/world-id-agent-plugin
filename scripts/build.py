@@ -13,6 +13,8 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 PLUGINS = {"sandbox": "world-id-sandbox", "production": "world-id"}
 MANIFESTS = ("plugin.json", ".codex-plugin/plugin.json", ".claude-plugin/plugin.json")
+DEVELOPER_ROOT = Path("plugins/world-id-developer")
+ALL_MANIFESTS = (*MANIFESTS, *(str(DEVELOPER_ROOT / path) for path in MANIFESTS))
 PACKAGE_FILES = (*MANIFESTS, "mcp.json", ".mcp.json", "README.md",
                  ".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json")
 VERSION_PATTERN = (r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
@@ -60,7 +62,7 @@ def load_environments(root):
 
 def package_files(root):
     paths = [Path(path) for path in PACKAGE_FILES]
-    for directory in ("skills", "assets"):
+    for directory in ("skills", "assets", "plugins"):
         if not (root / directory).is_dir():
             raise ValueError(f"Missing plugin directory: {directory}")
         paths.extend(path.relative_to(root) for path in sorted((root / directory).rglob("*"))
@@ -72,6 +74,42 @@ def package_files(root):
 
 
 def validate_package(files, config, other):
+    version = validate_plugin(files, config)
+    developer_files = {path.relative_to(DEVELOPER_ROOT): data for path, data in files.items()
+                       if path.is_relative_to(DEVELOPER_ROOT)}
+    developer_config = {**config, "name": config["name"].replace("world-id", "world-id-developer", 1),
+                        "mcp_url": config["mcp_url"] + "/developer"}
+    if validate_plugin(developer_files, developer_config) != version:
+        raise ValueError("User and developer plugin versions disagree")
+    user_skills = {path.parts[1] for path in files if path.parts[0] == "skills"}
+    developer_skills = {path.parts[1] for path in developer_files if path.parts[0] == "skills"}
+    if user_skills != {"world-id-account", "world-id-benefits", "world-id-sign-in"} or developer_skills != {"world-id-developer"}:
+        raise ValueError("User and developer skills must remain separate")
+    for filename in (".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json"):
+        catalog = json.loads(files[Path(filename)])
+        entries = catalog["plugins"]
+        expected_source = {"source": "local", "path": "./"} if filename.startswith(".agents") else "./"
+        if (catalog["name"] != config["catalog_name"] or len(entries) != 2
+                or entries[0]["name"] != config["name"] or entries[0]["source"] != expected_source):
+            raise ValueError(f"{filename}: catalog must expose this environment's root plugin")
+        developer_source = {"source": "local", "path": "./plugins/world-id-developer"} if filename.startswith(".agents") else "./plugins/world-id-developer"
+        if entries[1]["name"] != developer_config["name"] or entries[1]["source"] != developer_source:
+            raise ValueError(f"{filename}: catalog must expose the developer plugin")
+    if not any(path.name == "SKILL.md" for path in files):
+        raise ValueError("Plugin contains no skills")
+    wrong_host = urlsplit(other["issuer"]).netloc.encode()
+    # The production host can be a suffix of the sandbox host.
+    wrong_host_pattern = re.compile(rb"(?<![\w.-])" + re.escape(wrong_host), re.IGNORECASE)
+    for path, data in files.items():
+        if path.suffix in (".json", ".md"):
+            if b"{{" in data or b"}}" in data:
+                raise ValueError(f"{path}: unresolved template marker")
+            if wrong_host_pattern.search(data):
+                raise ValueError(f"{path}: references the other environment's host")
+    return version
+
+
+def validate_plugin(files, config):
     manifests = [json.loads(files[Path(path)]) for path in MANIFESTS]
     identity = {key: manifests[0][key] for key in ("name", "version", "description", "author")}
     if identity["name"] != config["name"] or not isinstance(identity["version"], str):
@@ -91,30 +129,14 @@ def validate_package(files, config, other):
         expected = {config["name"]: {"type": transport, "url": config["mcp_url"]}}
         if json.loads(files[Path(filename)])["mcpServers"] != expected:
             raise ValueError(f"{filename}: unexpected MCP connection")
-    for filename in (".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json"):
-        catalog = json.loads(files[Path(filename)])
-        entries = catalog["plugins"]
-        expected_source = {"source": "local", "path": "./"} if filename.startswith(".agents") else "./"
-        if (catalog["name"] != config["catalog_name"] or len(entries) != 1
-                or entries[0]["name"] != config["name"] or entries[0]["source"] != expected_source):
-            raise ValueError(f"{filename}: catalog must expose this environment's root plugin")
-    if not any(path.name == "SKILL.md" for path in files):
-        raise ValueError("Plugin contains no skills")
-    wrong_host = urlsplit(other["issuer"]).netloc.encode()
-    # The production host can be a suffix of the sandbox host.
-    wrong_host_pattern = re.compile(rb"(?<![\w.-])" + re.escape(wrong_host), re.IGNORECASE)
-    for path, data in files.items():
-        if path.suffix in (".json", ".md"):
-            if b"{{" in data or b"}}" in data:
-                raise ValueError(f"{path}: unresolved template marker")
-            if wrong_host_pattern.search(data):
-                raise ValueError(f"{path}: references the other environment's host")
     return identity["version"]
 
 
 def replacements(source, target):
     # Match once, longest first: replacing 'sandbox' first would corrupt URLs and names.
     values = {source[key]: target[key] for key in source if key != "branch"}
+    values[source["name"].replace("world-id", "world-id-developer", 1)] = target["name"].replace("world-id", "world-id-developer", 1)
+    values["World ID Developer (Sandbox)"] = "World ID Developer"
     values["Sandbox"] = "Production"
     values[urlsplit(source["issuer"]).netloc] = urlsplit(target["issuer"]).netloc
     values.update({f"--ref {source['branch']}": f"--ref {target['branch']}",
@@ -146,7 +168,7 @@ def build_outputs(root, source_sha=None, release_version=None):
                      for path, data in files.items()}
         other = configs["production" if environment == "sandbox" else "sandbox"]
         if release_version is not None:
-            for filename in MANIFESTS:
+            for filename in ALL_MANIFESTS:
                 path = Path(filename)
                 manifest = json.loads(files[path])
                 manifest["version"] = release_version

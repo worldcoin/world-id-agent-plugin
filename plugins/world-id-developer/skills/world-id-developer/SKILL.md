@@ -5,7 +5,7 @@ description: Register a sandbox app with World ID or configure its OIDC client, 
 
 # World ID developer
 
-Use this plugin's MCP connection at `https://sandbox.auth.world.org/mcp`.
+Use this plugin's MCP connection at `https://sandbox.auth.world.org/mcp/developer`.
 Perform registration and configuration through its tools. Browser control is
 not required: the developer signs in and approves credential requests themselves.
 Keep all operations in sandbox; never switch environments.
@@ -17,13 +17,12 @@ require `developer-portal:manage`, authorized through Google portal sign-in;
 they do not require a World ID or `world-id:read`.
 
 If authorization is needed, use the host's MCP authorization flow and follow the
-tool's scope challenge, preserving existing scopes. If the host cannot complete it:
+tool's scope challenge, requesting only `developer-portal:manage`. If the host cannot complete it:
 
-- Codex users can run `codex mcp login world-id-sandbox --scopes developer-portal:manage`
+- Codex users can run `codex mcp login world-id-developer-sandbox --scopes developer-portal:manage`
   in their terminal, complete Google sign-in and consent, then start a new Codex
-  session. If they also connect their World ID account, use
-  `--scopes world-id:read,developer-portal:manage` to authorize both flows.
-- Claude Code users can select the sandbox server in `/mcp` and authenticate
+  session. Account and benefit tools are available through the separate World ID plugin.
+- Claude Code users can select the World ID Developer sandbox server in `/mcp` and authenticate
   for the requested developer-portal scope.
 
 Resume after reconnection. Do not retry an authorization failure in a loop or

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "world-id-developer-sandbox",
+  "version": "0.1.0+build.20260928171618",
+  "description": "Register and configure sandbox apps with World ID using developer guides and Google portal sign-in.",
+  "author": {
+    "name": "Tools for Humanity"
+  }
+}
