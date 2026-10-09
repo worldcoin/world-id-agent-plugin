@@ -18,42 +18,28 @@ When reporting account details, disclose only connection status. Never disclose
 `continuity_handle` or other personal identifiers, including partial or transformed
 values, or quote raw tool responses or errors.
 
-For a status check or connection request, call `get_world_id_account` with no
-arguments. Its authentication challenge lets the host present sign-in. If the
-tool is unavailable, use the installed plugin's connection controls.
+Call `get_world_id_account` with no arguments to check status or begin connecting.
+If sign-in is required, offer to connect; proceed if already requested. Request
+`world-id:read`, preserving existing scopes:
 
-When connection is requested, use the active host's MCP authorization flow,
-requesting `world-id:read` and preserving previously granted scopes:
+- **Desktop/workspace plugin:** use native **Connect/Reconnect**. If you cannot
+  activate it, point to the reconnect banner or plugin connection settings.
+  Use these controls if the account tool is unavailable too. Do not substitute
+  CLI login or claim the browser opened before it does.
+- **Codex CLI session:** run `codex mcp login world-id-sandbox --scopes world-id:read`
+  only after `codex mcp list` confirms this server and endpoint in the same
+  environment. Include existing scopes; share the authorization URL if needed.
+  Report a missing server instead of creating a second connection.
+- **Claude Code:** authenticate the matching server through `/mcp`.
 
-- In ChatGPT/Codex desktop or a workspace-directory installation, use the native
-  **Connect** or **Reconnect** control. If no tool can activate it, direct the
-  user to the World ID reconnect banner or the plugin's connection settings.
-  Explain that clicking it opens browser sign-in; do not claim to have opened it.
-  Do not run `codex mcp login` as a fallback for these installations: the desktop
-  can load the plugin's tools even when the standalone CLI cannot find its server.
-- For a Codex CLI session, first confirm `codex mcp list` includes
-  `world-id-sandbox` at this plugin's endpoint in the same execution environment.
-  Then run `codex mcp login world-id-sandbox --scopes world-id:read`, including
-  existing scopes if known. Share the command's authorization URL if the browser
-  does not open. If the server is missing, explain the configuration issue rather
-  than attempting login or creating a second connection.
-- In Claude Code, use the matching server's authentication flow in `/mcp`.
+After sign-in, check status again in the same chat. If still unauthenticated or
+unavailable, report the connection as unconfirmed and try the host's status or
+refresh controls before suggesting a new chat. This does not prove verification
+failed. **Reconnect/Authentication expired** can also label an initial sign-in.
 
-Cancellation leaves sign-in incomplete. Stop the current attempt, but if the
-user later asks to connect, follow this flow again. The host may label an initial
-or cancelled sign-in **Reconnect** or **Authentication expired**; that wording
-alone does not establish that a previously connected account expired.
+Report connected only for an error-free response with `status: active` and
+`world_id_verified: true`; otherwise report not connected when both fields are
+valid. Other errors or invalid fields mean status is unknown.
 
-After authorization completes, check `get_world_id_account` again in the same
-chat. If the tool remains unavailable or requires authentication, report that
-this chat cannot yet confirm the connection and use the host's available
-connection status or refresh controls. Suggest a new chat only as a recovery
-step if those controls do not resolve it; do not automatically repeat login or
-conclude that World ID verification failed.
-Report connected only for an error-free response containing
-`status: active` and `world_id_verified: true`; otherwise report not connected
-when both status fields are valid. If authorization is required,
-explain that sign-in is needed and offer to connect; continue if already requested.
-If login is declined or fails, stop and summarize the cause. Do not retry in a loop.
-For other tool failures or invalid status fields, report that status could not
-be determined. Never ask for credentials, proofs, tokens, or identifiers in chat.
+Stop and explain cancelled or failed sign-in; retry only when requested later.
+Never ask for credentials, proofs, tokens, or identifiers in chat.

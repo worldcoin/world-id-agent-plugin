@@ -16,27 +16,21 @@ Call `get_portal_account` to check the connected developer identity. Portal tool
 require `developer-portal:manage`, authorized through Google portal sign-in;
 they do not require a World ID or `world-id:read`.
 
-If authorization is needed, use the host's MCP authorization flow and follow the
-tool's scope challenge, preserving existing scopes:
+Follow authorization challenges, preserving existing scopes:
 
-- In ChatGPT/Codex desktop or workspace-directory installations, use the native
-  **Connect** or **Reconnect** control. If no tool can activate it, direct the
-  user to the reconnect banner or the plugin's connection settings. Do not fall
-  back to a standalone CLI login for these installations.
-- In a Codex CLI session, confirm `codex mcp list` includes `world-id-sandbox`
-  at this plugin's endpoint in the same execution environment before running
-  `codex mcp login world-id-sandbox --scopes developer-portal:manage`.
-  If the server is missing, explain the configuration issue instead of attempting
-  login or creating a second connection. If they also connect their World ID, use
-  `--scopes world-id:read,developer-portal:manage` to authorize both flows.
-- Claude Code users can select the sandbox server in `/mcp` and authenticate
-  for the requested developer-portal scope.
+- **Desktop/workspace plugin:** use native **Connect/Reconnect**, or point to the
+  reconnect banner or plugin settings if you cannot activate it. No CLI fallback.
+- **Codex CLI session:** run
+  `codex mcp login world-id-sandbox --scopes developer-portal:manage` only after
+  `codex mcp list` confirms this server and endpoint in the same environment.
+  Preserve existing scopes; add `world-id:read` if also connecting World ID.
+  Report a missing server instead of creating a second connection.
+- **Claude Code:** authenticate the matching server through `/mcp`.
 
-After reconnection, check `get_portal_account` again in the same chat and resume.
-If the connection is still unavailable, use the host's available status or refresh
-controls before suggesting a new chat as recovery. Stop on cancellation or failed
-authorization; a later request to connect can start a fresh attempt. Do not retry
-in a loop or ask for tokens in chat.
+After sign-in, check `get_portal_account` again in the same chat. If unavailable,
+try the host's status or refresh controls before suggesting a new chat. Stop and
+explain cancelled or failed sign-in; retry only when requested later. Never ask
+for tokens in chat.
 
 ## Register an app
 
