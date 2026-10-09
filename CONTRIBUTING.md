@@ -37,8 +37,7 @@ Add `--version 0.2.0` to preview a specific release version.
 
 ## Release
 
-1. Deploy the IdP API and CloudFront `/mcp/developer` route, then merge and test
-   the plugin changes on `dev`.
+1. Merge and test the plugin changes on `dev`.
 2. In GitHub Actions, run **Open release PRs** from `main` and enter a new
    version, such as `0.2.0`. Leave `source_sha` blank to use the latest `dev` commit.
 3. CI records the selected SHA in the run summary and tests that source.

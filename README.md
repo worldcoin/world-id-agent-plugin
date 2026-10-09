@@ -149,8 +149,8 @@ App registration and configuration use Google developer-portal sign-in with the
 operations.
 
 The developer plugin connects to `/mcp/developer`. The user plugin connects to
-`/mcp`. Their tools, guides, and resource-bound tokens are separate. An existing
-user-plugin connection does not authorize the developer plugin.
+`/mcp`. Their tools, guides, and resource-bound tokens are separate. A user-plugin
+connection does not authorize the developer plugin.
 
 For **Codex**, add the marketplace if needed, install the developer plugin, and
 authorize Google portal access:
